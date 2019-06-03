@@ -9,7 +9,7 @@ import (
 // HandleHome serves the homepage
 func HandleHome(w http.ResponseWriter, r *http.Request) {
 	home := &Page{
-		Title:        "About Me",
+		Title:        "Harry Brown",
 		BodyTemplate: "pages/home.html",
 	}
 

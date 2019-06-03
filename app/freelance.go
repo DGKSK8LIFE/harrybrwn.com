@@ -2,7 +2,7 @@ package app
 
 import (
 	"net/http"
-	
+
 	"harrybrown.com/web"
 )
 
@@ -12,13 +12,9 @@ func Freelance(w http.ResponseWriter, r *http.Request) {
 		Title:        "Freelancing",
 		BodyTemplate: "pages/freelance.html",
 	}
-	
+
 	if err := page.Write(w); err != nil {
 		web.NotFound(w, r)
 		return
 	}
-
-	// templates := newTemplate("pages/freelance.html")
-	// 	if err := execTemplate(w, templates, nil); err != nil {
-	// }
 }

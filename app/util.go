@@ -1,14 +1,14 @@
 package app
 
 import (
-	"io"
 	"html/template"
+	"io"
 	"path/filepath"
 )
 
 var (
 	tmplPath = "static/templates/"
-	
+
 	baseTemplates = []string{
 		"static/templates/base.html",
 		"static/templates/header.html",
@@ -20,12 +20,12 @@ func execTemplate(w io.Writer, tmpl *template.Template, data interface{}) error 
 	return tmpl.ExecuteTemplate(w, "base", data)
 }
 
-func newTemplate(files ...string) *template.Template {
+func newTemplate(files ...string) (*template.Template, error) {
 	htmlfiles := baseTemplates
-	
+
 	for _, f := range files {
 		htmlfiles = append(htmlfiles, filepath.Join(tmplPath, f))
 	}
 
-	return template.Must(template.ParseFiles(htmlfiles...))
+	return template.ParseFiles(htmlfiles...)
 }

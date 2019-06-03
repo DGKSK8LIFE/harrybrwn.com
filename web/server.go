@@ -26,14 +26,21 @@ func (s *Server) ListenAndServe(addr string) error {
 	return s.server.ListenAndServe()
 }
 
+// HandlerHook is a hook that alows for the modification of handlers at
+// runtime
+var HandlerHook func(h http.Handler) http.Handler
+
 // Handle registers the a path and a handler.
 func (s *Server) Handle(path string, h http.Handler) {
+	if HandlerHook != nil {
+		h = HandlerHook(h)
+	}
 	s.mux.Handle(path, h)
 }
 
 // HandleFunc will register a new route with a HandlerFunc
-func (s *Server) HandleFunc(path string, h http.HandlerFunc) {
-	s.mux.HandleFunc(path, h)
+func (s *Server) HandleFunc(path string, fn http.HandlerFunc) {
+	s.mux.HandleFunc(path, fn)
 }
 
 // HandleThing will handle a thing

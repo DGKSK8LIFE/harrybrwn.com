@@ -1,0 +1,9 @@
+.jumbotron {
+	margin-bottom: 0;
+	background-color:cornflowerblue;
+	border-radius: 0px ;
+}
+
+#profile-pic img {
+	margin-bottom: 1rem;
+}

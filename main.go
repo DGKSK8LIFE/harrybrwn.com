@@ -21,9 +21,10 @@ var (
 )
 
 func init() {
+	web.HandlerHook = app.NewLogger
 	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.HandleFunc("/", app.HandleHome)
-	server.HandleFunc("/freelance", app.Freelance)
+	server.Handle("/", http.HandlerFunc(app.HandleHome))
+	server.Handle("/freelance", http.HandlerFunc(app.Freelance))
 }
 
 func main() {
