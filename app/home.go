@@ -1,20 +1,36 @@
 package app
 
 import (
-	"net/http"
-
 	"harrybrown.com/web"
 )
 
-// HandleHome serves the homepage
-func HandleHome(w http.ResponseWriter, r *http.Request) {
-	home := &Page{
-		Title:        "Harry Brown",
-		BodyTemplate: "pages/home.html",
+var (
+	// Routes is a list of all the app's routes
+	Routes = []web.Route{
+		&web.Page{
+			Title:     "Harry Brown",
+			Template:  "pages/home.html",
+			RoutePath: "/",
+		},
+		&web.Page{
+			Title:     "Freelancing",
+			Template:  "pages/freelance.html",
+			RoutePath: "/freelance",
+		},
+		&web.Page{
+			Title:     "Resume",
+			Template:  "pages/resume.html",
+			RoutePath: "/resume",
+		},
 	}
+)
 
-	if err := home.Write(w); err != nil {
-		web.NotFound(w, r)
-		return
+func init() {
+	web.TemplateDir = "static/templates/"
+
+	web.BaseTemplates = []string{
+		"static/templates/base.html",
+		"static/templates/header.html",
+		"static/templates/navbar.html",
 	}
 }

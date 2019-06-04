@@ -22,9 +22,9 @@ var (
 
 func init() {
 	web.HandlerHook = app.NewLogger
+
 	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.Handle("/", http.HandlerFunc(app.HandleHome))
-	server.Handle("/freelance", http.HandlerFunc(app.Freelance))
+	server.HandleRoutes(app.Routes)
 }
 
 func main() {

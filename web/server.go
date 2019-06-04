@@ -43,9 +43,43 @@ func (s *Server) HandleFunc(path string, fn http.HandlerFunc) {
 	s.mux.HandleFunc(path, fn)
 }
 
+// HandleRoutes will handle a list of routes.
+func (s *Server) HandleRoutes(routes []Route) {
+	for _, r := range routes {
+		s.Handle(r.Path(), r.Handler())
+	}
+}
+
 // HandleThing will handle a thing
 func (s *Server) HandleThing(thing interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "thing\n")
 	}
+}
+
+// Route defines an interface for various routes to be used in the Server struct.
+type Route interface {
+	Path() string
+	Handler() http.Handler
+}
+
+// HTTPRoute is an http route
+type HTTPRoute struct {
+	RoutePath   string
+	HTTPHandler http.Handler
+}
+
+// Path gets the path
+func (r *HTTPRoute) Path() string {
+	return r.RoutePath
+}
+
+// Handler gets the handler
+func (r *HTTPRoute) Handler() http.Handler {
+	return r.HTTPHandler
+}
+
+// NewRoute returns a basic Route interface
+func NewRoute(path string, handler http.Handler) Route {
+	return &HTTPRoute{RoutePath: path, HTTPHandler: handler}
 }
