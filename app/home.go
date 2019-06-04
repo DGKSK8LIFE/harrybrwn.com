@@ -34,13 +34,13 @@ var (
 			Title:     "Resume",
 			Template:  "pages/resume.html",
 			RoutePath: "/resume",
-			Data:      getResumeContent(),
+			Data:      getResumeContent("./static/data/resume.json"),
 		},
 	}
 )
 
-func getResumeContent() *resumeContent {
-	b, err := ioutil.ReadFile("./static/data/resume_data.json")
+func getResumeContent(file string) *resumeContent {
+	b, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Println(err)
 		return nil
