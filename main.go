@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 
 	"github.com/pkg/browser"
@@ -10,15 +12,53 @@ import (
 	"harrybrown.com/web"
 )
 
-const (
-	port    = "8080"
-	address = "localhost"
+var (
+	server      = web.NewServer()
+	address     = "localhost"
+	networkAddr = "0.0.0.0"
+
+	port    = flag.String("port", "8080", "the port to run the server on")
+	addrflg = flag.String("address", address, "the address to run the server on")
+	network = flag.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
 )
 
-var (
-	server = web.NewServer()
-	addr   string
-)
+func init() {
+	flag.Parse()
+	if *network {
+		address = networkAddr
+	} else if *addrflg != address {
+		address = *addrflg
+	}
+}
+
+func open(address, port string) string {
+	var addr string
+	if address == networkAddr {
+		addr = fmt.Sprintf("%s:%s", address, port)
+		address = findlocalIP()
+	} else {
+		addr = fmt.Sprintf("%s:%s", address, port)
+	}
+	err := browser.OpenURL(fmt.Sprintf("http://%s:%s/", address, port))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return addr
+}
+
+func findlocalIP() string {
+	addrs, _ := net.InterfaceAddrs()
+	var ones int
+	for _, addr := range addrs {
+		if ip, ok := addr.(*net.IPNet); ok && !ip.IP.IsLoopback() {
+			ones, _ = ip.Mask.Size()
+			if ip.IP.To4() != nil && ones > 16 {
+				return ip.IP.String()
+			}
+		}
+	}
+	return ""
+}
 
 func init() {
 	web.HandlerHook = app.NewLogger
@@ -28,14 +68,7 @@ func init() {
 }
 
 func main() {
-	addr := fmt.Sprintf("%s:%s", address, port)
-	url := fmt.Sprintf("http://%s/", addr)
-
-	if err := browser.OpenURL(url); err != nil {
-		log.Println(err)
-	}
-
-	if err := server.ListenAndServe(addr); err != nil {
+	if err := server.ListenAndServe(open(address, *port)); err != nil {
 		log.Fatal(err)
 	}
 }

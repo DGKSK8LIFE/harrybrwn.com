@@ -3,6 +3,7 @@ config.json
 
 # Testing
 /tests/
+/inspiration/
 
 # Images
 *.jpg

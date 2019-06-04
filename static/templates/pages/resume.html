@@ -1,0 +1,41 @@
+{{define "resume-item"}}
+					<div id="resume-item">
+						<h5 class="resume-name">{{.Name}}</h5>
+					{{- if .Title }}
+						<p class="resume-title"> &mdash; {{.Title}}</p>
+					{{- end}}
+						<p class="resume-date">{{.Date}}</p>
+						<p class="resume-content">{{.Content}}</p>
+					</div>
+{{- end}}
+
+{{define "body" -}}
+		<div class="row">
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<div id="job-experience">
+					<h2>Job Experience</h2>
+					{{- range .Data.Experience -}}
+						{{template "resume-item" .}}
+					{{- end}}
+				</div>
+				<div id="education">
+					<h2>Education</h2>
+					{{- range .Data.Education -}}
+						{{template "resume-item" .}}
+					{{- end}}
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+				<h3>Technical Experience</h3>
+				<ul>
+					<li>Python</li>
+					<li>Go</li>
+					<li>Git</li>
+					<li>Java</li>
+					<li>C/C++</li>
+					<li>JavaScript</li>
+					<li>html/css</li>
+				</ul>
+			</div>
+		</div>
+{{- end}}

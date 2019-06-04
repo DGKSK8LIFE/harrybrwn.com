@@ -1,0 +1,30 @@
+{
+	"Experience": [
+		{
+			"Name": "Lightstream Home Servises",
+			"Title": "Freelance Software Developer",
+			"Date": "December 2018 - February 2019",
+			"Content": "Hired to build, execute, and maintain a software system for running automated email marketing campaigns. "
+		},
+		{
+			"Name": "The Harry Brown Company",
+			"Title": "CEO",
+			"Date": "August 1998 - Present",
+			"Content": "Hired to manage the company."
+		}
+	],
+	"Education": [
+		{
+			"Name": "University of California Merced",
+			"Title": "Computer Science and Engineering",
+			"Date": "August 2017 - May 2021",
+			"Content": "I am currently enrolled as a sophomore and will be graduating in the spring of 2021.",
+			"BulletPionts": ["Hackathon participant", "Guitar Club member"]
+		},
+		{
+			"Name": "El Cerrito High School",
+			"Date": "August 2013 - May 2017",
+			"Content": ""
+		}
+	]
+}

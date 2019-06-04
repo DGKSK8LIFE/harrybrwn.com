@@ -1,10 +1,10 @@
 package web
 
 import (
-	"io"
 	"html/template"
-	"path/filepath"
+	"io"
 	"net/http"
+	"path/filepath"
 )
 
 var (
@@ -24,10 +24,19 @@ var (
 
 // Page is a struct that represents a webpage
 type Page struct {
-	Title    string
+	// the title of the web page
+	Title string
+
+	// Template is the main template used for the web page.
 	Template string
 
+	// RoutePath is the route used when serving the page.
 	RoutePath string
+
+	// Data is an interface used as a vessel for getting data into the web
+	// page template.
+	Data interface{}
+
 	templates []string
 }
 

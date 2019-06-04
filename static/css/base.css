@@ -7,3 +7,36 @@
 #profile-pic img {
 	margin-bottom: 1rem;
 }
+
+canvas {
+	/* border: 1px solid black; */
+	left: 0%;
+	width: 100%;
+	position: absolute;
+}
+
+.jumbotron #canvas-container {
+	position: inherit;
+	margin-top: 0rem;
+	margin-bottom: 0rem;
+}
+
+#resume-item p.resume-title {
+	font-size: 16px;
+}
+
+#resume-item p.resume-title, h5 {
+	display: inline;
+}
+
+#resume-item p.resume-content {
+	margin-top: 0px;
+	margin-bottom: 20px;
+}
+
+#resume-item p.resume-date {
+	font-weight: lighter;
+	font-size: 14px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}

@@ -1,8 +1,21 @@
 package app
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+
 	"harrybrown.com/web"
 )
+
+func init() {
+	web.BaseTemplates = []string{
+		"static/templates/base.html",
+		"static/templates/header.html",
+		"static/templates/navbar.html",
+	}
+	web.TemplateDir = "static/templates/"
+}
 
 var (
 	// Routes is a list of all the app's routes
@@ -21,16 +34,32 @@ var (
 			Title:     "Resume",
 			Template:  "pages/resume.html",
 			RoutePath: "/resume",
+			Data:      getResumeContent(),
 		},
 	}
 )
 
-func init() {
-	web.TemplateDir = "static/templates/"
-
-	web.BaseTemplates = []string{
-		"static/templates/base.html",
-		"static/templates/header.html",
-		"static/templates/navbar.html",
+func getResumeContent() *resumeContent {
+	b, err := ioutil.ReadFile("./static/data/resume_data.json")
+	if err != nil {
+		log.Println(err)
+		return nil
 	}
+	c := &resumeContent{}
+
+	if err = json.Unmarshal(b, c); err != nil {
+		log.Println(err)
+		return nil
+	}
+	return c
+}
+
+type resumeContent struct {
+	Experience []resumeItem
+	Education  []resumeItem
+}
+
+type resumeItem struct {
+	Name, Title, Date, Content string
+	BulletPionts               []string
 }
