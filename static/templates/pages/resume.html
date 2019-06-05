@@ -1,3 +1,9 @@
+{{define "header" -}}
+	<link rel="stylesheet" type="text/css" href="/static/css/base.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="/static/css/animate.css">
+	<title>{{ .Title }}</title>
+{{- end}}
+
 {{define "resume-item"}}
 					<div id="resume-item">
 						<h5 class="resume-name">{{.Name}}</h5>
