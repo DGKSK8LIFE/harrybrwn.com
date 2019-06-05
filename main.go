@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/pkg/browser"
 	"harrybrown.com/app"
@@ -13,21 +14,43 @@ import (
 )
 
 var (
+	flags = flag.NewFlagSet("harrybrown.com", flag.ExitOnError)
+
 	server      = web.NewServer()
 	address     = "localhost"
 	networkAddr = "0.0.0.0"
 
-	port    = flag.String("port", "8080", "the port to run the server on")
-	addrflg = flag.String("address", address, "the address to run the server on")
-	network = flag.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
+	port    = flags.String("port", "8080", "the port to run the server on")
+	addrflg = flags.String("address", address, "the address to run the server on")
+	network = flags.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
 )
 
 func init() {
-	flag.Parse()
+	if len(os.Args) > 2 {
+		if os.Args[1] == "-h" || os.Args[1] == "-help" {
+			flags.Usage()
+			os.Exit(0)
+		}
+	}
+
+	flags.Parse(os.Args[1:])
 	if *network {
 		address = networkAddr
 	} else if *addrflg != address {
 		address = *addrflg
+	}
+
+	web.HandlerHook = app.NewLogger
+
+	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	server.Handle("/ws", handleSocket())
+
+	server.HandleRoutes(app.Routes)
+}
+
+func main() {
+	if err := server.ListenAndServe(open(address, *port)); err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -58,17 +81,4 @@ func findlocalIP() string {
 		}
 	}
 	return ""
-}
-
-func init() {
-	web.HandlerHook = app.NewLogger
-
-	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.HandleRoutes(app.Routes)
-}
-
-func main() {
-	if err := server.ListenAndServe(open(address, *port)); err != nil {
-		log.Fatal(err)
-	}
 }

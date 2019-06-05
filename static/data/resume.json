@@ -4,7 +4,7 @@
 			"Name": "Lightstream Home Servises",
 			"Title": "Freelance Software Developer",
 			"Date": "December 2018 - February 2019",
-			"Content": "Hired to build, execute, and maintain a software system for running automated email marketing campaigns. "
+			"Content": "Hired to build, execute, and maintain a software system for running automated email marketing campaigns."
 		},
 		{
 			"Name": "The Harry Brown Company",
@@ -19,12 +19,18 @@
 			"Title": "Computer Science and Engineering",
 			"Date": "August 2017 - May 2021",
 			"Content": "I am currently enrolled as a sophomore and will be graduating in the spring of 2021.",
-			"BulletPionts": ["Hackathon participant", "Guitar Club member"]
+			"BulletPoints": ["Hackathon participant", "Guitar Club member"]
 		},
 		{
 			"Name": "El Cerrito High School",
 			"Date": "August 2013 - May 2017",
-			"Content": ""
+			"Content": "",
+			"BulletPoints": [
+				"AP Student",
+				"Played in award winning jazz bands and wind ensemble",
+				"President of Guitar club for two years",
+				"Played on the Varsity soccer team for three years"
+			]
 		}
 	]
 }

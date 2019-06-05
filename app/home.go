@@ -61,5 +61,5 @@ type resumeContent struct {
 
 type resumeItem struct {
 	Name, Title, Date, Content string
-	BulletPionts               []string
+	BulletPoints               []string
 }

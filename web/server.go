@@ -40,7 +40,7 @@ func (s *Server) Handle(path string, h http.Handler) {
 
 // HandleFunc will register a new route with a HandlerFunc
 func (s *Server) HandleFunc(path string, fn http.HandlerFunc) {
-	s.mux.HandleFunc(path, fn)
+	s.Handle(path, http.HandlerFunc(fn))
 }
 
 // HandleRoutes will handle a list of routes.
