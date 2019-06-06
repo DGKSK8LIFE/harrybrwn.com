@@ -1,11 +1,13 @@
-.jumbotron {
-	margin-bottom: 0;
-	background-color:cornflowerblue;
-	border-radius: 0px ;
+.navbar {
+	margin-bottom: 3rem;
+	background-color: black;
 }
 
-#profile-pic img {
-	margin-bottom: 1rem;
+.jumbotron {
+	margin-bottom: 0;
+	/* background-color: steelblue; */
+	background-color: gray;
+	border-radius: 0px ;
 }
 
 canvas {
@@ -13,10 +15,4 @@ canvas {
 	left: 0%;
 	width: 100%;
 	position: absolute;
-}
-
-.jumbotron #canvas-container {
-	position: inherit;
-	margin-top: 0rem;
-	margin-bottom: 0rem;
 }

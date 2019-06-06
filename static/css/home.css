@@ -1,0 +1,42 @@
+#profile-pic img {
+	margin-bottom: 1rem;
+}
+
+.navbar {
+	margin: 0px;
+	/* margin-bottom: 0px; */
+}
+
+div.nav-wrapper {
+	color: black;
+	background-color: black;
+}
+
+.jumbotron-top {
+	display: none;
+}
+
+.jumbotron {
+	background: #000000 url(../img/me.jpg) center top / 800px no-repeat padding-box border-box fixed;
+
+	color: #fff;
+	height: 750px;
+	padding: 0px;
+	margin: 0px 0px 50px 0px;
+}
+
+.jumbotron .home-header {
+	position: relative;
+	top: 35%;
+}
+
+.jumbotron .overlay {
+	/* background-color: #22A39F; */
+    position: absolute;
+    top: 60px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    opacity: 0.75;
+    z-index: 2;
+}

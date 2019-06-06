@@ -1,8 +1,12 @@
-#resume-item p.resume-title {
-	font-size: 16px;
+#resume .resume-category h6 {
+	color: blue;
 }
 
-#resume-item p.resume-title, h5 {
+#resume-item p.resume-title {
+	font-size: 17px;
+}
+
+#resume-item .resume-name, .resume-title {
 	display: inline;
 }
 

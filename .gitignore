@@ -1,5 +1,6 @@
 # Config
 config.json
+go.sum
 
 # Testing
 /tests/
@@ -8,3 +9,6 @@ tests/*
 
 # Images
 *.jpg
+
+# Dev
+.vscode
