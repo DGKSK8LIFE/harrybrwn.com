@@ -1,10 +1,20 @@
 {{define "header" -}}
-	<link rel="stylesheet" type="text/css" href="/static/css/base.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/home.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/animate.css">
 	<title>{{ .Title }}</title>
 {{- end}}
 
 {{define "body" -}}
+	<div class="jumbotron">
+		<div class="container home-header text-center">
+			<h1>Talk is cheap. Show me the code.</h1><i> - Linus Torvalds</i>
+			<!-- <h1>Imagination is something you do alone.</h1><i>- Steve Wozniak</i> -->
+			<!-- <h1>Do more</h1><i>- Casey Neistat</i> -->
+			<!-- <h1>Fuck Bitches</h1><i>get money.</i> -->
+		</div>
+		<div class="overlay"></div>
+	</div>
+	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div id="experience-body">
@@ -20,11 +30,12 @@
 				<p>This is where my other stuff goes.</p>
 				</div>
 			<div class="col-lg-4 col-md-4 col-sm-8 col-sm-12">
-				<img id="profile-pic" src="/static/img/me.jpg" width="225" height="300" style="margin-bottom: 1rem;">
+				<!-- <img id="profile-pic" src="/static/img/me.jpg" width="225" height="300" style="margin-bottom: 1rem;"> -->
 				<h4>About Me</h4>
 				<p>I am a third year undergraduate student studying computer science. 
 				   I love playing the guitar and going for runs.</p>
 			</div>
 		</div>
 		<!-- <p class="text-center"><small>hello</small></p> -->
+	</div>
 {{- end}}

@@ -23,23 +23,24 @@
 {{- end}}
 
 {{define "body" -}}
+	<div class="container">
 		<div id="resume" class="row">
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div id="job-experience" class="resume-category">
-					<h2>Job Experience</h2>
+					<h6><font color="#4c8ac9">Job Experience</font></h6>
 					{{- range .Data.Experience -}}
 						{{template "resume-item" .}}
 					{{- end}}
 				</div>
 				<div id="education" class="resume-category">
-					<h2>Education</h2>
+					<h6><font color="#4c8ac9">Education</font></h6>
 					{{- range .Data.Education -}}
 						{{template "resume-item" .}}
 					{{- end}}
 				</div>
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-				<h3>Technical Experience</h3>
+				<h3>Technical Skills</h3>
 				<ul>
 					<li>Python</li>
 					<li>Go</li>
@@ -51,4 +52,5 @@
 				</ul>
 			</div>
 		</div>
+	</div>
 {{- end}}
