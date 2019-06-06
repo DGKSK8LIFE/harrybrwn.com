@@ -33,27 +33,35 @@ type Page struct {
 	// RoutePath is the route used when serving the page.
 	RoutePath string
 
+	// Serve is a function used to serve http requests with the Page.
+	Serve func(w http.ResponseWriter, r *http.Request)
+
 	// Data is an interface used as a vessel for getting data into the web
 	// page template.
 	Data interface{}
 
 	templates []string
+	blob      *template.Template
+	name      string
 }
 
 // Write will write the webpage to an io.Writer
 func (p *Page) Write(w io.Writer) error {
-	blob, err := newTemplate(p.allTemplates()...)
-	if err != nil {
+	if err := p.init(); err != nil {
 		return err
 	}
-	return execTemplate(w, blob, p)
+	return p.blob.ExecuteTemplate(w, p.name, p)
 }
 
 // ServerHTTP lets the Page struct impliment the http.Handler interface.
 func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if err := p.Write(w); err != nil {
-		NotFound(w, r)
+	if p.Serve == nil {
+		if err := p.Write(w); err != nil {
+			NotFound(w, r)
+		}
+		return
 	}
+	p.Serve(w, r)
 }
 
 // AddTemplate will add a template file to the page struct
@@ -71,29 +79,37 @@ func (p *Page) Handler() http.Handler {
 	return p
 }
 
-func (p *Page) allTemplates() []string {
-	return append(p.templates, p.Template)
+func (p *Page) init() (err error) {
+	// p.name = filepath.Base(p.Template)
+
+	p.name = BaseTemplateName
+	files := append(p.tmpls(), getfile(p.Template))
+	p.blob, err = template.New(p.name).ParseFiles(files...)
+	return err
+}
+
+func (p *Page) tmpls() (tmpls []string) {
+	tmpls = BaseTemplates
+	for _, t := range p.templates {
+		tmpls = append(tmpls, getfile(t))
+	}
+	return tmpls
+}
+
+func (p *Page) files() (files []string) {
+	files = BaseTemplates
+	for _, f := range p.templates {
+		files = append(files, getfile(f))
+	}
+	return files
 }
 
 var _ http.Handler = (*Page)(nil)
 var _ Route = (*Page)(nil)
-
-func execTemplate(w io.Writer, t *template.Template, data interface{}) error {
-	return t.ExecuteTemplate(w, BaseTemplateName, data)
-}
 
 func getfile(name string) string {
 	if len(TemplateDir) < 1 {
 		return name
 	}
 	return filepath.Join(TemplateDir, name)
-}
-
-func newTemplate(files ...string) (*template.Template, error) {
-	tmplFiles := BaseTemplates
-	for _, f := range files {
-		tmplFiles = append(tmplFiles, getfile(f))
-	}
-
-	return template.ParseFiles(tmplFiles...)
 }
