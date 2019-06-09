@@ -1,12 +1,16 @@
+#resume-categories div.resume-category {
+	margin-bottom: 2rem;
+}
+
 #resume .resume-category h6 {
-	color: blue;
+	color: #4c8ac9;
 }
 
 #resume-item p.resume-title {
 	font-size: 17px;
 }
 
-#resume-item .resume-name, .resume-title {
+#resume-item .resume-name, #resume-item .resume-title {
 	display: inline;
 }
 

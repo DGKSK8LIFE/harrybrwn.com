@@ -1,6 +1,5 @@
 {{define "header" -}}
 	<link rel="stylesheet" type="text/css" href="/static/css/resume.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/animate.css">
 	<title>{{ .Title }}</title>
 {{- end}}
 
@@ -23,9 +22,11 @@
 {{- end}}
 
 {{define "body" -}}
-	<div class="container">
-		<div id="resume" class="row">
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+{{template "navbar" .}}
+<div class="container">
+		<div class="jumbotron"></div>
+		<div id="resume" class="row justify-content-center">
+			<div id="resume-categories" class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div id="job-experience" class="resume-category">
 					<h6><font color="#4c8ac9">Job Experience</font></h6>
 					{{- range .Data.Experience -}}

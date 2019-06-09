@@ -1,12 +1,3 @@
-#profile-pic img {
-	margin-bottom: 1rem;
-}
-
-.navbar {
-	margin: 0px;
-	/* margin-bottom: 0px; */
-}
-
 div.nav-wrapper {
 	color: black;
 	background-color: black;
@@ -16,13 +7,15 @@ div.nav-wrapper {
 	display: none;
 }
 
-.jumbotron {
-	background: #000000 url(../img/me.jpg) center top / 800px no-repeat padding-box border-box fixed;
+:root {
+	--bg-img: url(../img/1125x1500/me_sm.jpg); /* this is the main image */
+}
 
+#home-profile.jumbotron {
+	background: #040404 url(../img/1125x1500/me_sm.jpg) center top / 900px no-repeat padding-box border-box fixed;
 	color: #fff;
-	height: 750px;
-	padding: 0px;
-	margin: 0px 0px 50px 0px;
+	/* height: 765px; */
+	height: 100vh;
 }
 
 .jumbotron .home-header {
@@ -30,13 +23,33 @@ div.nav-wrapper {
 	top: 35%;
 }
 
-.jumbotron .overlay {
-	/* background-color: #22A39F; */
-    position: absolute;
-    top: 60px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    opacity: 0.75;
-    z-index: 2;
+#home-about.container {
+	margin-top: 3rem;
+}
+
+#home-profile div.overlay {
+	position: absolute;
+	margin: 0px;
+	top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	background: rgba(0, 0, 0, 0.2);
+}
+
+#arrow.down {
+	position: relative;
+	top: 40vh;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease-out;
+}
+
+#arrow.down svg:hover {
+	-webkit-animation-delay: 0s;
+	animation-duration: 1s;
+	-webkit-animation-name: arrow-bounce;
+	animation-name: arrow-bounce;
+	-webkit-transform-origin: center bottom;
+  	transform-origin: center bottom;
 }

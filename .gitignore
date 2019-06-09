@@ -9,6 +9,7 @@ tests/*
 
 # Images
 *.jpg
+*.ico
 
 # Dev
 .vscode

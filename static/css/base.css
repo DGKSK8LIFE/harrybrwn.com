@@ -1,18 +1,23 @@
-.navbar {
-	margin-bottom: 3rem;
-	background-color: black;
+:root {
+	--bg-color: #040404;
 }
+
+.navbar {
+	/* margin-bottom: 3rem; */
+	/* background-color: var(--bg-color); */
+}
+
+/* #navbar .navbar{
+	color: var(--bg-color);
+} */
 
 .jumbotron {
-	margin-bottom: 0;
-	/* background-color: steelblue; */
-	background-color: gray;
 	border-radius: 0px ;
+	color: #343a40;
 }
 
-canvas {
-	/* border: 1px solid black; */
-	left: 0%;
-	width: 100%;
-	position: absolute;
+.jumbotron.jumbotron-top {
+	margin-bottom: 0;
+	/* background-color: steelblue; */
+	background-color: grey;
 }
