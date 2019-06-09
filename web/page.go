@@ -3,6 +3,7 @@ package web
 import (
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"path/filepath"
 )
@@ -57,6 +58,7 @@ func (p *Page) Write(w io.Writer) error {
 func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if p.Serve == nil {
 		if err := p.Write(w); err != nil {
+			log.Println(err)
 			NotFound(w, r)
 		}
 		return
@@ -81,16 +83,15 @@ func (p *Page) Handler() http.Handler {
 
 func (p *Page) init() (err error) {
 	// p.name = filepath.Base(p.Template)
-
 	p.name = BaseTemplateName
+
 	files := append(p.tmpls(), getfile(p.Template))
 	p.blob, err = template.New(p.name).ParseFiles(files...)
 	return err
 }
 
 func (p *Page) tmpls() (tmpls []string) {
-	tmpls = BaseTemplates
-	for _, t := range p.templates {
+	for _, t := range p.files() {
 		tmpls = append(tmpls, getfile(t))
 	}
 	return tmpls
@@ -99,7 +100,7 @@ func (p *Page) tmpls() (tmpls []string) {
 func (p *Page) files() (files []string) {
 	files = BaseTemplates
 	for _, f := range p.templates {
-		files = append(files, getfile(f))
+		files = append(files, f)
 	}
 	return files
 }

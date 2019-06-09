@@ -9,11 +9,8 @@ import (
 )
 
 func init() {
-	web.BaseTemplates = []string{
-		"static/templates/base.html",
-		"static/templates/navbar.html",
-	}
 	web.TemplateDir = "static/templates/"
+	web.BaseTemplates = []string{"/index.html", "/nav.html"} // included in all pages
 }
 
 var (

@@ -43,8 +43,6 @@ func init() {
 	web.HandlerHook = app.NewLogger
 
 	server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.Handle("/ws", handleSocket())
-
 	server.HandleRoutes(app.Routes)
 }
 

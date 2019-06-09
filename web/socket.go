@@ -9,6 +9,7 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+// ReadSocket is function that will not stick around so don't use it.
 func ReadSocket(conn *websocket.Conn) (chan []byte, chan error) {
 	ch := make(chan []byte)
 	errch := make(chan error)
