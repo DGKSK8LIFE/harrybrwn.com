@@ -8,7 +8,7 @@ import (
 
 var tmpl = template.Must(template.ParseFiles(
 	"static/templates/pages/404.html",
-	"static/templates/base.html",
+	"static/templates/index.html",
 ))
 
 // NotFound handles requests that generate a 404 error
