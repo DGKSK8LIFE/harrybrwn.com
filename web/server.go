@@ -3,15 +3,12 @@ package web
 import (
 	"fmt"
 	"net/http"
-
-	"harrybrown.com/email"
 )
 
 // Server is a server
 type Server struct {
 	mux    *http.ServeMux
 	server *http.Server
-	mailer *email.Sender
 }
 
 // NewServer creates a new server.
