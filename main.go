@@ -20,9 +20,10 @@ var (
 	address     = "localhost"
 	networkAddr = "0.0.0.0"
 
-	port    = flags.String("port", "8080", "the port to run the server on")
-	addrflg = flags.String("address", address, "the address to run the server on")
-	network = flags.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
+	port     = flags.String("port", "8080", "the port to run the server on")
+	addrflg  = flags.String("address", address, "the address to run the server on")
+	network  = flags.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
+	autoOpen = flags.Bool("open", true, "open the webapp in the browser on run")
 )
 
 func init() {
@@ -47,7 +48,14 @@ func init() {
 }
 
 func main() {
-	if err := server.ListenAndServe(open(address, *port)); err != nil {
+	var addr string
+	if *autoOpen {
+		addr = open(address, *port)
+	} else {
+		addr = fmt.Sprintf("%s:%s", address, *port)
+	}
+
+	if err := server.ListenAndServe(addr); err != nil {
 		log.Fatal(err)
 	}
 }

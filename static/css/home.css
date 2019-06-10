@@ -16,10 +16,12 @@ div.nav-wrapper {
 	color: #fff;
 	/* height: 765px; */
 	height: 100vh;
+	width: 100vw;
 }
 
 .jumbotron .home-header {
 	position: relative;
+	text-align: center;
 	top: 35%;
 }
 
@@ -32,8 +34,8 @@ div.nav-wrapper {
 	margin: 0px;
 	top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 	background: rgba(0, 0, 0, 0.2);
 }
 
@@ -41,8 +43,8 @@ div.nav-wrapper {
 	position: relative;
 	top: 40vh;
 	-webkit-animation-delay: 0s;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-timing-function: ease-out;
+	/* -webkit-animation-iteration-count: infinite; */
+	/* -webkit-animation-timing-function: ease-out; */
 }
 
 #arrow.down svg:hover {
