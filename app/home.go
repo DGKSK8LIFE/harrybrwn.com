@@ -2,8 +2,10 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"harrybrown.com/web"
 )
@@ -20,6 +22,9 @@ var (
 			Title:     "Harry Brown",
 			Template:  "pages/home.html",
 			RoutePath: "/",
+			Data: struct{ Age string }{
+				Age: fmt.Sprintf("%d years", int((time.Since(bday).Hours()/24)/365)),
+			},
 		},
 		&web.Page{
 			Title:     "Freelancing",
@@ -33,6 +38,8 @@ var (
 			Data:      getResumeContent("./static/data/resume.json"),
 		},
 	}
+
+	bday = time.Date(1998, time.August, 4, 4, 0, 0, 0, time.UTC)
 )
 
 func getResumeContent(file string) *resumeContent {

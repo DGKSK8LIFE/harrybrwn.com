@@ -23,25 +23,25 @@
 
 {{define "body" -}}
 {{template "navbar" .}}
-<div class="container">
+	<div class="container">
 		<div class="jumbotron"></div>
 		<div id="resume" class="row justify-content-center">
 			<div id="resume-categories" class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div id="job-experience" class="resume-category">
-					<h6><font color="#4c8ac9">Job Experience</font></h6>
+					<h6>Job Experience</h6>
 					{{- range .Data.Experience -}}
 						{{template "resume-item" .}}
 					{{- end}}
 				</div>
 				<div id="education" class="resume-category">
-					<h6><font color="#4c8ac9">Education</font></h6>
+					<h6>Education</h6>
 					{{- range .Data.Education -}}
 						{{template "resume-item" .}}
 					{{- end}}
 				</div>
 			</div>
-			<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-				<h3>Technical Skills</h3>
+			<div id="resume-other-skills" class=" resume-category col-lg-2 col-md-2 col-sm-6 col-xs-12">
+				<h6>Technical Skills</h6>
 				<ul>
 					<li>Python</li>
 					<li>Go</li>

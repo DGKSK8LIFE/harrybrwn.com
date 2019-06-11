@@ -1,34 +1,72 @@
-#home-profile.jumbotron {
-	background: #040404 url(../img/1125x1500/me_sm.jpg) center top/900px no-repeat padding-box border-box fixed;
-	height: 100vh;
+.jumbotron {
 	color: #fff;
 }
 
-#home-profile h1, #home-profile i {
+.container {
+	margin-bottom: 3em;
+	margin-top: 3em;
+}
+
+#home-profile.jumbotron {
+	background: #040404 url(../img/1125x1500/me_sm.jpg) center top/900px no-repeat padding-box border-box fixed;
+	height: 100vh;
+}
+
+#home-profile h1,
+#home-profile i {
 	position: relative;
 	top: 40vh;
 }
 
 #home-profile div.overlay {
 	position: absolute;
-
 	top: 0;
     left: 0;
 	width: 100%;
 	height: 100%;
-
 	background-color: rgba(0, 0, 0, 0.2);
 }
 
-#arrow.down {
+#arrow {
 	position: relative;
-	top: 70vh;
+	top: 65vh;
 }
 
-/* #arrow.down svg:hover {
-	animation-duration: 1s;
-	-webkit-animation-name: arrow-bounce;
-	animation-name: arrow-bounce;
-	-webkit-transform-origin: center bottom;
-	transform-origin: center bottom;
-} */
+#forest.jumbotron {
+	background: #040404 url(../img/forest.jpg) center center/900px no-repeat padding-box border-box;
+	background-size: cover;
+	height: 75vh;
+}
+
+.bounce-inf {
+	animation: infinite-bouncing;
+	animation-duration: 5s;
+	animation-delay: 0s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes infinite-bouncing {
+	0%, 90% {
+		transform: translateY(0px);
+	}
+	/* 93% {
+		transform: translateY(-5px);
+	} */
+	91% {
+		/* animation-timing-function: ease-in; */
+		transform: translateY(-10px);
+	}
+	/* 97% {
+		animation-timing-function: ease-in;
+		transform: translateY(-8px);
+	}
+	99% {
+		animation-timing-function: ease-in;
+		transform: translateY(-4px);
+	} */
+	100% {
+		/* animation-timing-function: ease-in; */
+		animmation-timing-function: cubic-bezier(0.65, 0.02, 0.65, 0.99);
+		transform: translateY(0px);
+	}
+}

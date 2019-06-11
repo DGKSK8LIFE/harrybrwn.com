@@ -6,27 +6,34 @@
 
 {{define "body" -}}
 {{template "navbar" .}}
-<div id="home-profile" class="jumbotron">
-	<div class="container text-center">
-		<div class="overlay"></div>
-		<div id="profile-quote">
-			<!-- <h1>Talk is cheap. Show me the code.</h1><i> - Linus Torvalds</i> -->
-			<!-- <h1>Imagination is something you do alone.</h1><i>- Steve Wozniak</i> -->
+	<div id="home-profile" class="jumbotron">
+		<div class="container text-center">
+			<div class="overlay"></div>
 			<h1>Do more</h1><i>- Casey Neistat</i>
+			<!-- <h1>Imagination is something you do alone.</h1><i>- Steve Wozniak</i> -->
 			<!-- <h2>I was never really good at anything except for the ability to learn.</h2><i>- Kanye West</i> -->
-		</div>
-		<div id="arrow" class="down animated arrow-bounce">
-			<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-				<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="white" stroke="none">
-					<path d="M207 4822 l-207 -207 1278 -1278 1277 -1277 1275 1275 1275 1275 -210 210 -210 210 -1065 -1065 -1065 -1065 -1065 1065 c-586 586 -1067 1065 -1070 1065 -3 0 -98 -93 -213 -208z"></path>
-				</g>
-			</svg>
+			<div id="arrow" class="animated bounce-arrow">
+				<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+					<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="white" stroke="none">
+						<path d="M207 4822 l-207 -207 1278 -1278 1277 -1277 1275 1275 1275 1275 -210 210 -210 210 -1065 -1065 -1065 -1065 -1065 1065 c-586 586 -1067 1065 -1070 1065 -3 0 -98 -93 -213 -208z"></path>
+					</g>
+				</svg>
+				<!-- <svg width="50px" height="50px"><g><path d="M 0 0 L50 50 M0 50 L50 0z" stroke="#fff" fill="white" fill-rule="evenodd"/></g></svg> -->
+			</div>
 		</div>
 	</div>
-</div>
 	<div id="home-about" class="container">
 		<div class="row">
-			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+			<div class="col-lg-4 col-md-4 col-sm-8 col-sm-12">
+				<h4>About Me</h4>
+				<p>I am a third year undergraduate student studying computer science. 
+				   I love playing the guitar and going for runs.</p>
+				<strong>Name:</strong><br>
+				Harry Brown<br>
+				<strong>Age:</strong><br>
+				{{.Age}}<br>
+			</div>
+			<!-- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div id="experience-body">
 					<h4>Experience</h4>
 					<p>I started programming my freshman year of collage in a Data Science
@@ -38,14 +45,10 @@
 				</div>
 				<h4>Other Stuff</h4>
 				<p>This is where my other stuff goes.</p>
-			</div>
-			<div class="col-lg-4 col-md-4 col-sm-8 col-sm-12">
-				<h4>About Me</h4>
-				<p>I am a third year undergraduate student studying computer science. 
-				   I love playing the guitar and going for runs.</p>
-			</div>
+			</div> -->
 		</div>
 	</div>
+	<div id="forest" class="jumbotron"></div>
 	<div id="home-projects" class="container text-center">
 		<h3>Talk is cheap. Show me the code.</h3><i> - Linus Torvalds</i>
 		<div class="row">
