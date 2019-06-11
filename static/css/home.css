@@ -8,14 +8,14 @@
 }
 
 #home-profile.jumbotron {
-	background: #040404 url(../img/1125x1500/me_sm.jpg) center top/900px no-repeat padding-box border-box fixed;
+	background: #040404 url(../img/me_sm.jpg?size=sm) center top/900px no-repeat padding-box border-box fixed;
 	height: 100vh;
 }
 
 #home-profile h1,
 #home-profile i {
 	position: relative;
-	top: 40vh;
+	top: 30vh;
 }
 
 #home-profile div.overlay {
@@ -36,6 +36,14 @@
 	background: #040404 url(../img/forest.jpg) center center/900px no-repeat padding-box border-box;
 	background-size: cover;
 	height: 75vh;
+}
+
+#projects ul {
+	list-style: none;
+}
+
+#projects a {
+	text-decoration: none;
 }
 
 .bounce-inf {
