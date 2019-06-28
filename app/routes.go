@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,9 +11,22 @@ import (
 	"harrybrown.com/web"
 )
 
+var db *sql.DB
+
 func init() {
 	web.TemplateDir = "static/templates/"
 	web.BaseTemplates = []string{"/index.html", "/nav.html"} // included in all pages
+
+	// mysqlCred := fmt.Sprintf("%s:%s/%s",
+	// 	env.Get("MYSQL_USER"),
+	// 	env.Get("MYSQL_PASSWORD"),
+	// 	env.Get("DB_NAME"))
+
+	// var err error
+	// db, err = sql.Open(env.Get("DATABASE"), mysqlCred)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 }
 
 var (

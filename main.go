@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"os"
 
 	"github.com/pkg/browser"
@@ -19,14 +18,16 @@ var (
 	server      = web.NewServer()
 	address     = "localhost"
 	networkAddr = "0.0.0.0"
+	port        = "8080"
 
-	port     = flags.String("port", "8080", "the port to run the server on")
-	addrflg  = flags.String("address", address, "the address to run the server on")
 	network  = flags.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
 	autoOpen = flags.Bool("open", true, "open the webapp in the browser on run")
 )
 
 func init() {
+	flags.StringVar(&port, "port", port, "the port to run the server on")
+	flags.StringVar(&address, "address", address, "the address to run the server on")
+
 	if len(os.Args) > 2 {
 		if os.Args[1] == "-h" || os.Args[1] == "-help" {
 			flags.Usage()
@@ -37,23 +38,20 @@ func init() {
 	flags.Parse(os.Args[1:])
 	if *network {
 		address = networkAddr
-	} else if *addrflg != address {
-		address = *addrflg
 	}
 
 	web.HandlerHook = app.NewLogger
 
-	// server.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	server.Handle("/static/", http.StripPrefix("/static/", app.NewFileServer("static")))
+	server.Handle("/static/", app.NewFileServer("static"))
 	server.HandleRoutes(app.Routes)
 }
 
 func main() {
 	var addr string
 	if *autoOpen {
-		addr = open(address, *port)
+		addr = open(address, port)
 	} else {
-		addr = fmt.Sprintf("%s:%s", address, *port)
+		addr = fmt.Sprintf("%s:%s", address, port)
 	}
 
 	if err := server.ListenAndServe(addr); err != nil {

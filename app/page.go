@@ -16,19 +16,22 @@ type FileServer struct {
 
 // NewFileServer will create a new FileServer
 func NewFileServer(dir string) http.Handler {
-	return &FileServer{http.FileServer(http.Dir(dir))}
+	return &FileServer{
+		http.StripPrefix(fmt.Sprintf("/%s/", dir), http.FileServer(http.Dir(dir))),
+	}
 }
 
 func (fs *FileServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	size := r.URL.Query().Get("size")
+
 	if len(size) > 0 {
-		r.URL.Path = pointToImage(r.URL, size)
+		r.URL.Path = findImage(r.URL, size)
 	}
 
 	fs.fserver.ServeHTTP(w, r)
 }
 
-func pointToImage(u *url.URL, size string) string {
+func findImage(u *url.URL, size string) string {
 	var dir string
 	switch size {
 	case "xs":
