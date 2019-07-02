@@ -3,12 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net"
 	"os"
+	"time"
 
 	"github.com/pkg/browser"
+
 	"harrybrown.com/app"
+	"harrybrown.com/pkg/cmd"
+	"harrybrown.com/pkg/log"
 	"harrybrown.com/web"
 )
 
@@ -20,39 +23,53 @@ var (
 	networkAddr = "0.0.0.0"
 	port        = "8080"
 
-	network  = flags.Bool("network", false, "run the server on the local wifi network (0.0.0.0)")
+	network  = flags.Bool("network", false, "run the server on the local wifi network 0.0.0.0")
 	autoOpen = flags.Bool("open", true, "open the webapp in the browser on run")
+
+	serverStart = time.Now()
 )
 
 func init() {
 	flags.StringVar(&port, "port", port, "the port to run the server on")
 	flags.StringVar(&address, "address", address, "the address to run the server on")
-
-	if len(os.Args) > 2 {
-		if os.Args[1] == "-h" || os.Args[1] == "-help" {
-			flags.Usage()
-			os.Exit(0)
-		}
-	}
-
 	flags.Parse(os.Args[1:])
+
 	if *network {
 		address = networkAddr
 	}
 
 	web.HandlerHook = app.NewLogger
-
-	server.Handle("/static/", app.NewFileServer("static"))
 	server.HandleRoutes(app.Routes)
 }
 
+var commands = []cmd.Command{
+	app.RoutesCmd,
+	{
+		Syntax:      "time",
+		Description: "get the server uptime",
+		Run: func() {
+			fmt.Println("Server Uptime:", time.Since(serverStart))
+		},
+	},
+	{
+		Syntax:      "addr",
+		Description: "print out the address that the server is running at",
+		Run: func() {
+			fmt.Printf("http://%s/\n", addr)
+		},
+	},
+}
+
+var addr string
+
 func main() {
-	var addr string
 	if *autoOpen {
 		addr = open(address, port)
 	} else {
 		addr = fmt.Sprintf("%s:%s", address, port)
 	}
+
+	go cmd.Run(commands)
 
 	if err := server.ListenAndServe(addr); err != nil {
 		log.Fatal(err)
@@ -67,9 +84,12 @@ func open(address, port string) string {
 	} else {
 		addr = fmt.Sprintf("%s:%s", address, port)
 	}
-	err := browser.OpenURL(fmt.Sprintf("http://%s:%s/", address, port))
+	url := fmt.Sprintf("http://%s:%s/", address, port)
+
+	fmt.Println("Running server at", url)
+	err := browser.OpenURL(url)
 	if err != nil {
-		log.Fatal(err)
+		log.Warning(err)
 	}
 	return addr
 }
