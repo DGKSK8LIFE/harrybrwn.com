@@ -19,6 +19,9 @@ func NewServer() *Server {
 // ListenAndServe will run the server.
 func (s *Server) ListenAndServe(addr string) error {
 	s.server = &http.Server{Addr: addr, Handler: s.mux}
+	if HandlerHook != nil {
+		s.server.Handler = HandlerHook(s.mux)
+	}
 
 	return s.server.ListenAndServe()
 }
@@ -29,9 +32,6 @@ var HandlerHook func(h http.Handler) http.Handler
 
 // Handle registers the a path and a handler.
 func (s *Server) Handle(path string, h http.Handler) {
-	if HandlerHook != nil {
-		h = HandlerHook(h)
-	}
 	s.mux.Handle(path, h)
 }
 
@@ -66,6 +66,14 @@ type HTTPRoute struct {
 	HTTPHandler http.Handler
 }
 
+// NewRoute returns a basic Route interface
+func NewRoute(path string, handler http.Handler) Route {
+	return &HTTPRoute{
+		RoutePath:   path,
+		HTTPHandler: handler,
+	}
+}
+
 // Path gets the path
 func (r *HTTPRoute) Path() string {
 	return r.RoutePath
@@ -74,9 +82,4 @@ func (r *HTTPRoute) Path() string {
 // Handler gets the handler
 func (r *HTTPRoute) Handler() http.Handler {
 	return r.HTTPHandler
-}
-
-// NewRoute returns a basic Route interface
-func NewRoute(path string, handler http.Handler) Route {
-	return &HTTPRoute{RoutePath: path, HTTPHandler: handler}
 }
