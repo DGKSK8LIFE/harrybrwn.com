@@ -4,11 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"path"
-	"strings"
-
-	"harrybrown.com/pkg/log"
 )
 
 // FileServer is a custum file server.
@@ -47,42 +43,4 @@ func findImage(u *url.URL, size string) string {
 	}
 	folder, file := path.Split(u.Path)
 	return path.Join(folder, dir, file)
-}
-
-// UserAgent is a struct that represents a user-agent
-type UserAgent struct {
-	OS      *OSInfo
-	Browser string
-}
-
-// OSInfo is a grouping of information about a computers operating system.
-type OSInfo struct {
-	Name    string
-	Version float32
-	Arch    string
-}
-
-func parseUserAgent(agent string) {
-	parts := strings.Split(agent, " ")
-	fmt.Println("User-Agent:", parts)
-}
-
-// NewLogger creates a new logger that will intercept a handler and replace it
-// with one that has logging functionality.
-func NewLogger(h http.Handler) http.Handler {
-	return &pageLogger{
-		wrap: h,
-		// l:    log.New(os.Stdout, "", log.LstdFlags),
-		l: log.NewColorLogger(os.Stdout, log.Purple),
-	}
-}
-
-type pageLogger struct {
-	wrap http.Handler
-	l    log.PrintLogger
-}
-
-func (p *pageLogger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	p.l.Printf("%s %s %s\n", r.Method, r.Proto, r.URL)
-	p.wrap.ServeHTTP(w, r)
 }

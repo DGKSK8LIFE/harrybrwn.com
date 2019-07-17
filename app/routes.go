@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 
 	_ "harrybrown.com/pkg/env" // init the .env variables
+	"harrybrown.com/pkg/log"
 	"harrybrown.com/web"
 )
 
