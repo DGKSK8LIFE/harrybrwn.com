@@ -1,20 +1,18 @@
-FROM golang:1.11
+FROM heroku/heroku:18-build as build
 
 LABEL maintainer="Harry Brown <harrybrown98@gmail.com"
 
-RUN mkdir src/harrybrown.com
-COPY . src/harrybrown.com
+COPY . /app
+WORKDIR /app
 
-# RUN env
-RUN ls
-RUN ls src/harrybrown.com
-# RUN cd harrybrown.com
-RUN ls harrybrown.com
+RUN mkdir -p /tmp/buildpack/heroku/go /tmp/build_cache /tmp/env
+RUN curl https://codon-buildpacks.s3.amazonaws.com/buildpacks/heroku/go.tgz | tar xz -C /tmp/buildpack/heroku/go
 
-RUN go get -d -v harrybrown.com/...
-# RUN go build -o harrybrown.com/harrybrown.com main.go
-# RUN go get ./...
-RUN go install harrybrown.com
+RUN STACK=heroku-18 /tmp/buildpack/heroku/go/bin/compile /app /tmp/build_cache /tmp/env
 
-EXPOSE 8080
-CMD ["harrybrown.com"]
+FROM heroku/heroku:18
+
+ENV HOME /app
+WORKDIR /app
+RUN useradd -m heroku
+USER heroku
