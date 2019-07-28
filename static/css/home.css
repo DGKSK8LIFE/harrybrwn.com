@@ -38,8 +38,16 @@
 	height: 75vh;
 }
 
-#projects ul {
+#projects ul, #tech-expertise ul {
 	list-style: none;
+}
+
+#tech-expertise h5 {
+	font-weight: bold;
+}
+
+#tech-expertise h3 {
+	padding-bottom: 50px;
 }
 
 #projects a {
