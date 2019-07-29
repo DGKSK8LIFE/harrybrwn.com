@@ -38,8 +38,18 @@
 	height: 75vh;
 }
 
-#projects ul, #tech-expertise ul {
+.lang-list, .tools-list {
+	text-align: left;
+	padding-left: 240px;
+}
+
+.lang-list ul, .tools-list ul {
 	list-style: none;
+}
+
+#tech-expertise {
+	padding-top: 30px;
+	padding-bottom: 50px;
 }
 
 #tech-expertise h5 {
@@ -52,6 +62,10 @@
 
 #projects a {
 	text-decoration: none;
+}
+
+#projects ul {
+	list-style: none;
 }
 
 .bounce-inf {
