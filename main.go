@@ -63,13 +63,13 @@ var commands = []cmd.Command{
 var addr string
 
 func main() {
-	if *autoOpen {
-		addr = open(address, port)
-	} else {
-		addr = fmt.Sprintf("%s:%s", address, port)
-	}
+	// if *autoOpen {
+	// 	addr = open(address, port)
+	// } else {
+	// 	addr = fmt.Sprintf("%s:%s", address, port)
+	// }
 
-	go cmd.Run(commands)
+	// go cmd.Run(commands)
 
 	if err := server.ListenAndServe(addr); err != nil {
 		log.Fatal(err)
