@@ -5,19 +5,19 @@ import (
 	"net/http"
 )
 
-// Server is a server
-type Server struct {
+// Router is an http router.
+type Router struct {
 	mux    *http.ServeMux
 	server *http.Server
 }
 
-// NewServer creates a new server.
-func NewServer() *Server {
-	return &Server{mux: http.NewServeMux()}
+// NewRouter creates a new router.
+func NewRouter() *Router {
+	return &Router{mux: http.NewServeMux()}
 }
 
 // ListenAndServe will run the server.
-func (s *Server) ListenAndServe(addr string) error {
+func (s *Router) ListenAndServe(addr string) error {
 	s.server = &http.Server{Addr: addr, Handler: s.mux}
 	if HandlerHook != nil {
 		s.server.Handler = HandlerHook(s.mux)
@@ -31,24 +31,24 @@ func (s *Server) ListenAndServe(addr string) error {
 var HandlerHook func(h http.Handler) http.Handler
 
 // Handle registers the a path and a handler.
-func (s *Server) Handle(path string, h http.Handler) {
+func (s *Router) Handle(path string, h http.Handler) {
 	s.mux.Handle(path, h)
 }
 
 // HandleFunc will register a new route with a HandlerFunc
-func (s *Server) HandleFunc(path string, fn http.HandlerFunc) {
+func (s *Router) HandleFunc(path string, fn http.HandlerFunc) {
 	s.Handle(path, http.HandlerFunc(fn))
 }
 
 // HandleRoutes will handle a list of routes.
-func (s *Server) HandleRoutes(routes []Route) {
+func (s *Router) HandleRoutes(routes []Route) {
 	for _, r := range routes {
 		s.Handle(r.Path(), r.Handler())
 	}
 }
 
 // HandleThing will handle a thing
-func (s *Server) HandleThing(thing interface{}) http.HandlerFunc {
+func (s *Router) HandleThing(thing interface{}) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "thing\n")
 	}
