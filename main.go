@@ -22,6 +22,7 @@ var (
 	address     = "localhost"
 	networkAddr = "0.0.0.0"
 	port        = "8080"
+	debug       = false
 
 	network  = flags.Bool("network", false, "run the server on the local wifi network 0.0.0.0")
 	autoOpen = flags.Bool("open", true, "open the webapp in the browser on run")
@@ -30,6 +31,8 @@ var (
 )
 
 func init() {
+	flags.BoolVar(&debug, "debug", debug, "turn on debugging features")
+	flags.BoolVar(&debug, "d", debug, "turn on debugging features (shorthand)")
 	flags.StringVar(&port, "port", port, "the port to run the server on")
 	flags.StringVar(&address, "address", address, "the address to run the server on")
 	flags.Parse(os.Args[1:])
@@ -63,13 +66,15 @@ var commands = []cmd.Command{
 var addr string
 
 func main() {
-	// if *autoOpen {
-	// 	addr = open(address, port)
-	// } else {
-	// 	addr = fmt.Sprintf("%s:%s", address, port)
-	// }
+	if debug {
+		if *autoOpen {
+			addr = open(address, port)
+		} else {
+			addr = fmt.Sprintf("%s:%s", address, port)
+		}
 
-	// go cmd.Run(commands)
+		go cmd.Run(commands)
+	}
 
 	if err := server.ListenAndServe(addr); err != nil {
 		log.Fatal(err)
