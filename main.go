@@ -74,6 +74,8 @@ func main() {
 		}
 
 		go cmd.Run(commands)
+	} else {
+		addr = fmt.Sprintf(":%s", os.Getenv("PORT"))
 	}
 
 	if err := server.ListenAndServe(addr); err != nil {
