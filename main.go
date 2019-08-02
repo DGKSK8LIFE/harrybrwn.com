@@ -42,7 +42,12 @@ func init() {
 }
 
 func main() {
-	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	var addr string
+	if debug {
+		addr = fmt.Sprintf("%s:%s", address, port)
+	} else {
+		addr = fmt.Sprintf(":%s", os.Getenv("PORT"))
+	}
 
 	if err := server.ListenAndServe(addr); err != nil {
 		log.Fatal(err)
