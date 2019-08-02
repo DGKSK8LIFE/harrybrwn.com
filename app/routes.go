@@ -8,7 +8,7 @@ import (
 
 	_ "harrybrown.com/pkg/env" // init the .env variables
 	"harrybrown.com/pkg/log"
-	"harrybrown.com/web"
+	"harrybrown.com/pkg/web"
 )
 
 func init() {

@@ -8,7 +8,7 @@ import (
 
 	"harrybrown.com/app"
 	"harrybrown.com/pkg/log"
-	"harrybrown.com/web"
+	"harrybrown.com/pkg/web"
 )
 
 var (
