@@ -12,8 +12,8 @@ import (
 func NewLogger(h http.Handler) http.Handler {
 	return &pageLogger{
 		wrap: h,
-		// l:    log.New(os.Stdout, "", log.LstdFlags),
-		l: log.NewColorLogger(os.Stdout, log.Purple),
+		// l: log.NewColorLogger(os.Stdout, log.Purple),
+		l: log.NewPlainLogger(os.Stdout),
 	}
 }
 
