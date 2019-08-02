@@ -1,24 +1,11 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 
-	"harrybrown.com/pkg/cmd"
 	"harrybrown.com/pkg/log"
 )
-
-// RoutesCmd is the command that prints out the roues.
-var RoutesCmd = cmd.Command{
-	Syntax:      "routes",
-	Description: "print out all the routes that the server is handling",
-	Run: func() {
-		for i, r := range Routes {
-			fmt.Printf("%d: '%s'\n", i, r.Path())
-		}
-	},
-}
 
 // NewLogger creates a new logger that will intercept a handler and replace it
 // with one that has logging functionality.
