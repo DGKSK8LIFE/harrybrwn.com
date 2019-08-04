@@ -1,4 +1,4 @@
-.jumbotron {
+#home-profile.jumbotron {
 	color: #fff;
 }
 
@@ -36,6 +36,11 @@
 	background: #040404 url(../img/forest.jpg) center center/900px no-repeat padding-box border-box;
 	background-size: cover;
 	height: 75vh;
+}
+
+.lang-list ul, .tools-list ul, #forest h3 {
+	background-color: white;
+	border-radius: 10px;
 }
 
 .lang-list, .tools-list {
