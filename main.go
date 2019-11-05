@@ -35,6 +35,7 @@ func main() {
 	var addr string
 	if debug {
 		addr = fmt.Sprintf("%s:%s", address, port)
+		fmt.Println("serving at", addr)
 	} else {
 		addr = fmt.Sprintf(":%s", os.Getenv("PORT"))
 	}

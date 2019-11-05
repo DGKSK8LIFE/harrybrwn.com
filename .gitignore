@@ -1,6 +1,9 @@
 # Build
-/bin/
+bin/
+bin/harrybrown.com
 *.log
+build
+Makefile
 
 # Config
 config.json

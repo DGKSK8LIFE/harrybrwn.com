@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"time"
 
-	_ "harrybrown.com/pkg/env" // init the .env variables
 	"harrybrown.com/pkg/log"
 	"harrybrown.com/pkg/web"
 )
