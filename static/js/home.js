@@ -3,7 +3,6 @@ function elem(name) {
 	if (element == null) {
 		element = document.getElementsByClassName(name)[0];
 	}
-	// window[name] = element;
 
 	return {
 		addclass: function(clsname) {
@@ -15,7 +14,6 @@ function elem(name) {
 			return this;
 		},
 		mouseover: function(fn) {
-			// fn.this = this;
 			element.addEventListener('mouseover', fn);
 			return this;
 		}

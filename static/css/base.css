@@ -2,6 +2,10 @@
 	border-radius: 0px ;
 }
 
+.navbar {
+	background-color: #343a40;
+}
+
 :root {
 	--bg-color: #040404;
 	--container-margin: 3rem;
