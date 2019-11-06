@@ -1,9 +1,9 @@
-.navbar {
-	background-color: transparent;
+.bg-dark {
 	transition: background-color 2s ease 0s;
 }
 
-.bg-dark {
+.navbar {
+	background-color: transparent;
 	transition: background-color 2s ease 0s;
 }
 

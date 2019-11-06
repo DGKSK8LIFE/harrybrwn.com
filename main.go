@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"harrybrown.com/app"
+	"harrybrown.com/pkg/cmd"
 	"harrybrown.com/pkg/log"
 	"harrybrown.com/pkg/web"
 )
@@ -32,12 +33,16 @@ func init() {
 }
 
 func main() {
-	var addr string
+	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+
 	if debug {
-		addr = fmt.Sprintf("%s:%s", address, port)
-		fmt.Println("serving at", addr)
-	} else {
-		addr = fmt.Sprintf(":%s", os.Getenv("PORT"))
+		app.Commands = append(app.Commands, cmd.Command{
+			Syntax:      "addr",
+			Description: "show server address",
+			Run:         func() { fmt.Println(addr) },
+		})
+
+		go cmd.Run(app.Commands)
 	}
 
 	if err := router.ListenAndServe(addr); err != nil {
