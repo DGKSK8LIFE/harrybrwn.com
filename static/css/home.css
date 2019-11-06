@@ -1,11 +1,10 @@
 .navbar {
 	background-color: transparent;
-	transition: background-color 1s ease 0s;
+	transition: background-color 2s ease 0s;
 }
 
-.navbar.solid {
-	background-color: #343a40;
-	transition: background-color 1s ease 0s;
+.bg-dark {
+	transition: background-color 2s ease 0s;
 }
 
 #home-profile.jumbotron {
