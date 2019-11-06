@@ -67,10 +67,9 @@
 					<li>Python</li>
 					<li>Go</li>
 					<li>C</li>
+					<li>C++</li>
 					<li>Java</li>
 					<li>R</li>
-					<li>C++</li>
-					<li>SQL</li>
 				</ul>
 			</div>
 			<div class="tools-list col-lg-6">
@@ -118,10 +117,22 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="tech-skills" class="row">
-		<div class="col-lg-4 col-md-4"></div>
-		<div class="col-lg-4 col-md-4"></div>
+	<div class="container">
+		<div id="tech-skills" class="row text-center">
+			<div class="col-lg col-md"></div>
+			<div class="col-lg col-md"></div>
+		</div>
 	</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+	$(window).scroll(function() {
+		console.log("scrolling check");
+		if ($(window).scrollTop() >= 200) {
+			$(nav).addClass('solid')
+		} else {
+			$(nav).removeClass('solid')
+		}
+	});
+</script>
 <script src="/static/js/home.js"></script>
 {{- end}}
