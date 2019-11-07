@@ -7,7 +7,6 @@ Makefile
 
 # Config
 config.json
-go.sum
 
 # Testing
 /tests/
