@@ -11,6 +11,8 @@ type PlainLogger struct {
 	w io.Writer
 }
 
+var _ PrintLogger = (*PlainLogger)(nil)
+
 // NewPlainLogger creates a new plain logger.
 func NewPlainLogger(w io.Writer) *PlainLogger {
 	return &PlainLogger{

@@ -5,7 +5,13 @@ import (
 	"os"
 
 	"harrybrown.com/pkg/log"
+	"harrybrown.com/pkg/web"
 )
+
+func init() {
+	log.DefaultLogger = log.NewPlainLogger(os.Stdout)
+	web.HandlerHook = NewLogger
+}
 
 // NewLogger creates a new logger that will intercept a handler and replace it
 // with one that has logging functionality.

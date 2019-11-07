@@ -28,7 +28,6 @@ func init() {
 	flags.StringVar(&address, "address", address, "the address to run the server on")
 	flags.Parse(os.Args[1:])
 
-	web.HandlerHook = app.NewLogger
 	router.HandleRoutes(app.Routes)
 }
 
@@ -43,6 +42,8 @@ func main() {
 		})
 
 		go cmd.Run(app.Commands)
+		addr = fmt.Sprintf("%s:%s", address, port)
+		log.Println("running on", addr)
 	}
 
 	if err := router.ListenAndServe(addr); err != nil {

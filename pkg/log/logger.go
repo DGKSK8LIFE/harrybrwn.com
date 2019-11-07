@@ -23,6 +23,8 @@ type ColorLogger struct {
 	col    Color
 }
 
+var _ PrintLogger = (*ColorLogger)(nil)
+
 // NewColorLogger creates a new logger that prints in color.
 func NewColorLogger(w io.Writer, color Color) *ColorLogger {
 	return &ColorLogger{
