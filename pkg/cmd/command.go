@@ -31,14 +31,7 @@ func RunWithScanner(s *bufio.Scanner, cmds []Command) {
 		}
 
 		if s.Text() == "help" || s.Text() == "h" {
-			s := "   "
-			fmt.Println("Commands:")
-			fmt.Println(s, "exit - exit the program")
-			fmt.Println(s, "help - get help")
-			for _, cmd := range cmds {
-				fmt.Printf("    %s - %s\n", cmd.Syntax, cmd.Description)
-			}
-			print("\n")
+			help(cmds)
 		}
 
 		for _, cmd := range cmds {
@@ -48,4 +41,15 @@ func RunWithScanner(s *bufio.Scanner, cmds []Command) {
 		}
 		fmt.Print("> ")
 	}
+}
+
+func help(cmds []Command) {
+	s := "   "
+	fmt.Println("Commands:")
+	fmt.Println(s, "exit - exit the program")
+	fmt.Println(s, "help - get help")
+	for _, cmd := range cmds {
+		fmt.Printf("    %s - %s\n", cmd.Syntax, cmd.Description)
+	}
+	print("\n")
 }
