@@ -32,21 +32,22 @@ func init() {
 }
 
 func main() {
-	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	if !debug {
+		port = os.Getenv("PORT") // use heroku's port variable
+	} else {
+		log.Printf("running on %s:%s\n", address, port)
 
-	if debug {
 		app.Commands = append(app.Commands, cmd.Command{
 			Syntax:      "addr",
 			Description: "show server address",
-			Run:         func() { fmt.Println(addr) },
+			Run:         func() { fmt.Printf("%s:%s\n", address, port) },
 		})
 
+		// scans stdin and runs the commands given alongside the server
 		go cmd.Run(app.Commands)
-		addr = fmt.Sprintf("%s:%s", address, port)
-		log.Println("running on", addr)
 	}
 
-	if err := router.ListenAndServe(addr); err != nil {
+	if err := router.ListenAndServe(fmt.Sprintf(":%s", port)); err != nil {
 		log.Fatal(err)
 	}
 }
