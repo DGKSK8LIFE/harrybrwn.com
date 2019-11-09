@@ -75,8 +75,17 @@
 	padding-bottom: 50px;
 }
 
-#projects a {
+#projects {
+	margin-left: 15%;
+}
+
+#projects a, #projects th {
+	padding-left: 10px;
 	text-decoration: none;
+}
+
+#projects tr {
+	text-align: left;
 }
 
 #projects ul {
