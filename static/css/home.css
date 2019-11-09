@@ -42,7 +42,8 @@
 }
 
 #forest.jumbotron {
-	background: #040404 url(../img/forest.jpg) center center/900px no-repeat padding-box border-box;
+	background: #040404 none center center/900px no-repeat padding-box border-box;
+	background-image: url(../img/forest.jpg);
 	background-size: cover;
 	height: 75vh;
 }

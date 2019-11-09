@@ -4,6 +4,7 @@ bin/harrybrown.com
 *.log
 build
 Makefile
+static/bootstrap-4.3.1-dist
 
 # Config
 config.json
