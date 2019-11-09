@@ -20,14 +20,27 @@ function elem(name) {
 	};
 }
 
-(() => {
-	let nav = elem('nav').addclass('fixed-top');
+function set_navbar_color(pos) {
+	if (pos >= 200)
+		$('.navbar').addClass('bg-dark');
+	else
+		$('.navbar').removeClass('bg-dark');
+}
 
-	this.onscroll = () => {
-		if (pageYOffset >= 200)
-			nav.addclass('bg-dark');
+(() => {
+	$('.navbar').addClass('fixed-top')
+	let overlay = $('.overlay');
+	let default_bg = overlay.css('background-color');
+
+	$(window).scroll(() => {
+		let pos = $(window).scrollTop();
+
+		set_navbar_color(pos);
+
+		if (pos >= 550)
+			overlay.css('background-color', 'black');
 		else
-			nav.removeclass('bg-dark');
-	}
-	// elem('arrow').mouseover(() => {});
+			overlay.css('background-color', default_bg);
+	})
+	elem('arrow').mouseover(() => {});
 })();
