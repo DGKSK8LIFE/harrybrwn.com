@@ -49,11 +49,11 @@ func (s *Router) HandleRoute(r Route) {
 
 // HandleRoutes will handle a list of routes.
 func (s *Router) HandleRoutes(routes []Route) {
-	// var err error
+	var err error
 	for _, r := range routes {
-		// if err = r.Init(); err != nil {
-		// 	s.server.ErrorLog.Printf("Error on Route(\"%s\").Init(): %s\n", r.Path(), err.Error())
-		// }
+		if err = r.Init(); err != nil {
+			s.server.ErrorLog.Printf("Error on Route(\"%s\").Init(): %s\n", r.Path(), err.Error())
+		}
 		s.Handle(r.Path(), r.Handler())
 	}
 }
