@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	log.DefaultLogger = log.NewPlainLogger(os.Stdout)
+	// log.DefaultLogger = log.NewPlainLogger(os.Stdout)
 	web.HandlerHook = NewLogger
 }
 

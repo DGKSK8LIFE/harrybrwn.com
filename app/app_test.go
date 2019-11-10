@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -31,14 +32,11 @@ func TestFindUrl(t *testing.T) {
 	}
 }
 
-// {{define "footer" -}}
-// <script src="/static/js/home.js"></script>
-// {- end}
-
 func init() {
 	cwd, _ := os.Getwd()
 	dir := filepath.Base(cwd)
 	if dir == "app" {
+		fmt.Println("changing directories")
 		os.Chdir("..")
 	}
 }
@@ -52,6 +50,15 @@ func TestHomePage(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handler := Routes[0].Handler()
 
+	handler.ServeHTTP(rr, req) // this is also going to log the error
+	if rr.Code != http.StatusInternalServerError {
+		t.Error("an uninitialized template should return fail, got:", rr.Code)
+	}
+
+	if route, ok := handler.(*web.Page); ok {
+		route.Init() // needs to read the template files
+	}
+	rr = httptest.NewRecorder()
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -61,6 +68,9 @@ func TestHomePage(t *testing.T) {
 	page := rr.Body.Bytes()
 	if page == nil || len(page) == 0 {
 		t.Error("the homepage is empty")
+	}
+	if len(page) < 500 {
+		t.Error("the home page is too short")
 	}
 }
 

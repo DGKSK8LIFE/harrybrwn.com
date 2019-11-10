@@ -57,16 +57,14 @@ type Page struct {
 
 // WriteTo will write the webpage to an io.Writer
 func (p *Page) WriteTo(w io.Writer) (int64, error) {
-	if p.HotReload {
-		if err := p.Init(); err != nil {
-			return 0, err
-		}
+	if p.blob == nil {
+		return 0, Errorf(500, "Templates for '%s' are uninitialized", p.Title)
 	}
 
 	b := &bytes.Buffer{}
 	err := p.blob.ExecuteTemplate(b, p.baseTmplName, p)
 	if err != nil {
-		return 0, err
+		return 0, Errorf(500, "Template Error: %s", err.Error())
 	}
 
 	n, err := w.Write(b.Bytes())
@@ -75,14 +73,24 @@ func (p *Page) WriteTo(w io.Writer) (int64, error) {
 
 // ServerHTTP lets the Page struct impliment the http.Handler interface.
 func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if p.Serve == nil {
-		if _, err := p.WriteTo(w); err != nil {
-			log.Println(err)
+	if p.HotReload {
+		if err := p.Init(); err != nil {
+			log.Error(err)
+		}
+	}
+	if p.Serve != nil {
+		p.Serve(w, r)
+		return
+	}
+	if _, err := p.WriteTo(w); err != nil {
+		if e, ok := err.(*ErrorHandler); ok {
+			e.ServeHTTP(w, r)
+		} else {
 			NotFound(w, r)
+			log.Error(err)
 		}
 		return
 	}
-	p.Serve(w, r)
 }
 
 // AddTemplateFile will add a template file to the page struct
@@ -110,7 +118,10 @@ func (p *Page) Init() (err error) {
 	}
 	p.baseTmplName = BaseTemplateName
 	p.blob, err = template.New(p.baseTmplName).ParseFiles(p.templates...)
-	return err
+	if err != nil {
+		return Errorf(http.StatusInternalServerError, "Template Error: %s", err.Error())
+	}
+	return nil
 }
 
 func (p *Page) tmpls() []string {
