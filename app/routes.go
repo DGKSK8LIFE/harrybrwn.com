@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"time"
 
 	"harrybrown.com/pkg/log"
@@ -21,8 +22,11 @@ var Routes = []web.Route{
 		Title:     "Harry Brown",
 		Template:  "pages/home.html",
 		RoutePath: "/",
-		Data: struct{ Age string }{
-			Age: fmt.Sprintf("%d years", int((time.Since(bday).Hours()/24)/365)),
+		RequestHook: func(self *web.Page, w http.ResponseWriter, r *http.Request) {
+			age := time.Since(bday).Hours() / 24 / 356
+			self.Data = &struct{ Age string }{
+				Age: fmt.Sprintf("%d years", int(age)),
+			}
 		},
 	},
 	&web.Page{
@@ -37,6 +41,15 @@ var Routes = []web.Route{
 		Data:      getResume("./static/data/resume.json"),
 	},
 	web.NewRoute("/static/", NewFileServer("static")), // handle file server
+
+	web.NewRouteFunc("/api/age", func(w http.ResponseWriter, r *http.Request) {
+		age := time.Since(bday).Hours() / 24 / 356
+		fmt.Fprintf(w, "{\"age\": %d}", int(age))
+	}),
+	web.NewRouteFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotImplemented)
+		fmt.Fprint(w, `{"error": "Not finished with the api"}`)
+	}),
 }
 
 var bday = time.Date(1998, time.August, 4, 4, 0, 0, 0, time.UTC)

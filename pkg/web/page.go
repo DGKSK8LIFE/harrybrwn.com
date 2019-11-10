@@ -41,6 +41,10 @@ type Page struct {
 	// blob and serve that.
 	Serve func(w http.ResponseWriter, r *http.Request)
 
+	// RequestHook is a handler function that alows users to modify the responce or the page.
+	// Runs once for every request to the page.
+	RequestHook func(self *Page, w http.ResponseWriter, r *http.Request)
+
 	// Data is an interface used as a vessel for getting data into the web
 	// page template.
 	Data interface{}
@@ -78,6 +82,10 @@ func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 		}
 	}
+	if p.RequestHook != nil {
+		p.RequestHook(p, w, r)
+	}
+
 	if p.Serve != nil {
 		p.Serve(w, r)
 		return
