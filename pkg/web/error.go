@@ -69,43 +69,12 @@ func (h *ErrorHandler) log() {
 }
 
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(h.status)
-	t, err := template.New("").Parse(`
-{{define "header" -}}
-<title>{{.Title}}</title>
-<style>h2, .ErrorMsg { text-align: center; }</style>
-{{- end}}
-{{define "body" -}}
-<div class="container">
-	<h2>{{.Status}} Something Went Wrong</h2>
-	<div class="ErrorMsg">
-		<p>Sorry, I must have broken something.</p>
-		<p hidden>if you can see this then i am sorry</p>
-	</div>
-</div>
-{{- end}}
-{{define "footer" -}}{{- end}}`)
-	if err != nil {
-		log.Error("Error when serving error page:", err)
-	}
-	t, err = t.ParseFiles("static/templates/index.html")
-	if err != nil {
-		log.Error("Error when serving error page:", err)
-	}
-	if err = t.ExecuteTemplate(w, "base", struct {
-		Title  string
-		Status int
-	}{
-		Title:  "Error",
-		Status: h.status,
-	}); err != nil {
-		log.Error("Error when serving error page:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	ServeError(w, h.status)
 }
 
 // ServeError serves a generic http error page.
 func ServeError(w http.ResponseWriter, status int) {
+	w.WriteHeader(status)
 	t, err := template.New("").Parse(`
 {{define "header" -}}
 <title>{{.Title}}</title>
@@ -138,6 +107,4 @@ func ServeError(w http.ResponseWriter, status int) {
 		log.Println("Error when serving error page:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	log.Println("setting status:", status)
-	w.WriteHeader(status)
 }
