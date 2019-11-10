@@ -14,6 +14,7 @@ type PrintLogger interface {
 	Println(...interface{})
 	Warning(...interface{})
 	Error(...interface{})
+	Errorf(string, ...interface{})
 	Fatal(...interface{})
 }
 
@@ -71,6 +72,11 @@ func (cl *ColorLogger) Warning(v ...interface{}) {
 // Error prints to the logger as an error.
 func (cl *ColorLogger) Error(v ...interface{}) {
 	cl.Output(fmt.Sprintln(v...), Red)
+}
+
+// Errorf logs a formatted error in red.
+func (cl *ColorLogger) Errorf(format string, v ...interface{}) {
+	cl.Output(fmt.Sprintf(format, v...), Red)
 }
 
 // Fatal will output an error and exit the program.

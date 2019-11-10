@@ -40,6 +40,11 @@ func (l *PlainLogger) Error(v ...interface{}) {
 	l.Output(fmt.Sprintln(v...))
 }
 
+// Errorf logs a formated error.
+func (l *PlainLogger) Errorf(format string, v ...interface{}) {
+	l.Output(fmt.Sprintf(format, v...))
+}
+
 // Fatal will output an error and exit the program.
 func (l *PlainLogger) Fatal(v ...interface{}) {
 	l.Error(v...)
@@ -75,6 +80,11 @@ func Warning(v ...interface{}) {
 // Error prints an error to the default logger.
 func Error(v ...interface{}) {
 	DefaultLogger.Error(v...)
+}
+
+// Errorf logs a formatted error.
+func Errorf(format string, v ...interface{}) {
+	DefaultLogger.Errorf(format, v...)
 }
 
 // Fatal prints an error to the default logger and exits the program.
