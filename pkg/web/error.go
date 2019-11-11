@@ -20,8 +20,8 @@ type ErrorHandler struct {
 // NotFound handles requests that generate a 404 error
 func NotFound(w http.ResponseWriter, r *http.Request) {
 	var tmplNotFound = template.Must(template.ParseFiles(
-		"static/templates/pages/404.html",
-		"static/templates/index.html",
+		"templates/pages/404.html",
+		"templates/index.html",
 	))
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -93,7 +93,7 @@ func ServeError(w http.ResponseWriter, status int) {
 	if err != nil {
 		log.Println("Error when serving error page:", err)
 	}
-	t, err = t.ParseFiles("static/templates/index.html")
+	t, err = t.ParseFiles("templates/index.html")
 	if err != nil {
 		log.Println("Error when serving error page:", err)
 	}

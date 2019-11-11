@@ -56,7 +56,9 @@ func TestHomePage(t *testing.T) {
 	}
 
 	if route, ok := handler.(*web.Page); ok {
-		route.Init() // needs to read the template files
+		if route.Expand() != nil { // needs to read the template files
+			t.Error("Pages shouldn't have anything to expand")
+		}
 	}
 	rr = httptest.NewRecorder()
 	handler.ServeHTTP(rr, req)
