@@ -36,9 +36,9 @@ type Page struct {
 	// RoutePath is the route used when serving the page.
 	RoutePath string
 
-	// Serve is a function used to serve http requests with the Page. If the
-	// Serve field is not given the Page will execute it's internal template
-	// blob and serve that.
+	// Serve is a function used to serve http requests and will override the
+	// default behavior of the page. If the Serve field is not given the Page
+	// will execute it's internal template blob and serve that.
 	Serve func(w http.ResponseWriter, r *http.Request)
 
 	// RequestHook is a handler function that alows users to modify the responce or the page.
@@ -78,7 +78,7 @@ func (p *Page) WriteTo(w io.Writer) (int64, error) {
 // ServerHTTP lets the Page struct impliment the http.Handler interface.
 func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if p.HotReload {
-		if err := p.Init(); err != nil {
+		if err := p.init(); err != nil {
 			log.Error(err)
 		}
 	}
@@ -118,9 +118,16 @@ func (p *Page) Handler() http.Handler {
 	return p
 }
 
-// Init will initialize the Page by collecting all it's templates and
-// creating the template blob.
-func (p *Page) Init() (err error) {
+// Expand returns nothing because a webpage cannont be expanded.
+func (p *Page) Expand() []Route {
+	if err := p.init(); err != nil {
+		log.Error(err.Error())
+	}
+	return nil
+}
+
+func (p *Page) init() error {
+	var err error
 	if len(p.templates) == 0 {
 		p.templates = p.tmpls()
 	}
@@ -155,9 +162,11 @@ func (p *Page) templateCount() int {
 	return n
 }
 
-var _ http.Handler = (*Page)(nil)
-var _ Route = (*Page)(nil)
-var _ io.WriterTo = (*Page)(nil)
+var (
+	_ http.Handler = (*Page)(nil)
+	_ Route        = (*Page)(nil)
+	_ io.WriterTo  = (*Page)(nil)
+)
 
 func getfile(name string) string {
 	if len(TemplateDir) < 1 {

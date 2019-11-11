@@ -41,18 +41,19 @@ func (s *Router) HandleFunc(path string, fn http.HandlerFunc) {
 
 // HandleRoute will handle a route.
 func (s *Router) HandleRoute(r Route) {
-	if err := r.Init(); err != nil {
-		s.server.ErrorLog.Printf("Error on Route(\"%s\").Init(): %s\n", r.Path(), err.Error())
+	if nested := r.Expand(); nested != nil {
+		s.HandleRoutes(nested)
 	}
 	s.Handle(r.Path(), r.Handler())
 }
 
 // HandleRoutes will handle a list of routes.
 func (s *Router) HandleRoutes(routes []Route) {
-	var err error
+	var nested []Route
 	for _, r := range routes {
-		if err = r.Init(); err != nil {
-			s.server.ErrorLog.Printf("Error on Route(\"%s\").Init(): %s\n", r.Path(), err.Error())
+		nested = r.Expand()
+		if nested != nil {
+			s.HandleRoutes(nested)
 		}
 		s.Handle(r.Path(), r.Handler())
 	}
