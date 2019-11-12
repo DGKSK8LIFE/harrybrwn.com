@@ -11,17 +11,18 @@ import (
 
 // ErrorHandler is an error type for internal website errors.
 type ErrorHandler struct {
-	msg    string
-	status int
-	file   string
-	line   int
+	msg      string
+	status   int
+	file     string
+	funcname string
+	line     int
 }
 
 // NotFound handles requests that generate a 404 error
 func NotFound(w http.ResponseWriter, r *http.Request) {
 	var tmplNotFound = template.Must(template.ParseFiles(
-		"templates/pages/404.html",
-		"templates/index.html",
+		getfile("pages/404.html"),
+		getfile("index.html"),
 	))
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -36,41 +37,47 @@ func NotFound(w http.ResponseWriter, r *http.Request) {
 
 // Error creates a new error.
 func Error(status int, msg string) error {
-	_, file, line, _ := runtime.Caller(1)
+	pc, file, line, _ := runtime.Caller(1)
 	e := &ErrorHandler{
-		msg:    msg,
-		status: status,
-		file:   file,
-		line:   line,
+		msg:      msg,
+		status:   status,
+		file:     file,
+		line:     line,
+		funcname: runtime.FuncForPC(pc).Name(),
 	}
-	e.log()
 	return e
 }
 
 // Errorf create an error with a formatted message.
 func Errorf(status int, format string, vars ...interface{}) error {
-	_, file, line, _ := runtime.Caller(1)
+	pc, file, line, _ := runtime.Caller(1)
+
 	e := &ErrorHandler{
-		msg:    fmt.Sprintf(format, vars...),
-		status: status,
-		file:   file,
-		line:   line,
+		msg:      fmt.Sprintf(format, vars...),
+		status:   status,
+		file:     file,
+		line:     line,
+		funcname: runtime.FuncForPC(pc).Name(),
 	}
-	e.log()
 	return e
 }
 
 func (h *ErrorHandler) Error() string {
-	return h.msg
+	return fmt.Sprintf("(%s:%d %s()) %s\n", h.file, h.line, h.funcname, h.msg)
 }
 
 func (h *ErrorHandler) log() {
-	log.Errorf("(%s:%d) Error: %s\n", h.file, h.line, h.msg)
+	log.Error(h.Error())
 }
 
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ServeError(w, h.status)
 }
+
+var (
+	_ error        = (*ErrorHandler)(nil)
+	_ http.Handler = (*ErrorHandler)(nil)
+)
 
 // ServeError serves a generic http error page.
 func ServeError(w http.ResponseWriter, status int) {
@@ -93,7 +100,7 @@ func ServeError(w http.ResponseWriter, status int) {
 	if err != nil {
 		log.Println("Error when serving error page:", err)
 	}
-	t, err = t.ParseFiles("templates/index.html")
+	t, err = t.ParseFiles(getfile("index.html"))
 	if err != nil {
 		log.Println("Error when serving error page:", err)
 	}

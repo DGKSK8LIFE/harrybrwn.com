@@ -1,7 +1,6 @@
 package web
 
 import (
-	"html/template"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -39,17 +38,16 @@ func TestPageTemplatesCollection(t *testing.T) {
 func TestPageTemplating(t *testing.T) {
 	var (
 		p = &Page{
-			Title:        "Test Page",
-			Template:     "",
-			RoutePath:    "/testing",
-			HotReload:    false,
-			baseTmplName: BaseTemplateName,
+			Title:     "Test Page",
+			Template:  "",
+			RoutePath: "/testing",
+			HotReload: false,
 		}
 		err error
 	)
-	p.blob, err = template.New(p.baseTmplName).Parse("<p>title: {{.Title}}</p>\n<p>path: {{.RoutePath}}</p>")
+	err = p.settemplate(BaseTemplateName, "<p>title: {{.Title}}</p>\n<p>path: {{.RoutePath}}</p>")
 	if err != nil {
-		t.Error("template parsing error")
+		t.Fatal("template parsing error")
 	}
 
 	req, err := http.NewRequest("GET", p.Path(), nil)
@@ -67,5 +65,21 @@ func TestPageTemplating(t *testing.T) {
 	exp := "<p>title: Test Page</p>\n<p>path: /testing</p>"
 	if rr.Body.String() != exp {
 		t.Error("got:", rr.Body.String(), "expedted:", exp)
+	}
+}
+
+func TestPageErrors(t *testing.T) {
+	var p = &Page{
+		Title:     "Page That will fail",
+		Template:  "not here",
+		RoutePath: "/shouldfail",
+	}
+	err := p.init()
+	if err == nil {
+		t.Error("init should have returned an error if there are not templates")
+	}
+	_, err = p.Expand()
+	if err == nil {
+		t.Error("Expand should also return an error if there are to templates")
 	}
 }

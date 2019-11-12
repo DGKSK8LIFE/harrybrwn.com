@@ -2,6 +2,8 @@ package web
 
 import (
 	"net/http"
+
+	"harrybrown.com/pkg/log"
 )
 
 // Router is an http router.
@@ -36,26 +38,37 @@ func (s *Router) Handle(path string, h http.Handler) {
 
 // HandleFunc will register a new route with a HandlerFunc
 func (s *Router) HandleFunc(path string, fn http.HandlerFunc) {
-	s.Handle(path, http.HandlerFunc(fn))
+	s.mux.Handle(path, http.HandlerFunc(fn))
 }
 
 // HandleRoute will handle a route.
 func (s *Router) HandleRoute(r Route) {
-	if nested := r.Expand(); nested != nil {
+	var h http.Handler
+	nested, err := r.Expand()
+
+	if err != nil {
+		log.Error(err)
+
+		if e, ok := err.(*ErrorHandler); ok {
+			h = e
+		} else {
+			h = http.HandlerFunc(NotFound)
+		}
+	} else {
+		h = r.Handler()
+	}
+
+	s.mux.Handle(r.Path(), h)
+
+	if nested != nil {
 		s.HandleRoutes(nested)
 	}
-	s.Handle(r.Path(), r.Handler())
 }
 
 // HandleRoutes will handle a list of routes.
 func (s *Router) HandleRoutes(routes []Route) {
-	var nested []Route
 	for _, r := range routes {
-		nested = r.Expand()
-		if nested != nil {
-			s.HandleRoutes(nested)
-		}
-		s.Handle(r.Path(), r.Handler())
+		s.HandleRoute(r)
 	}
 }
 

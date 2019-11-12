@@ -11,13 +11,22 @@ import (
 type JSONRoute struct {
 	APIPath string
 	Run     func(http.ResponseWriter, *http.Request) interface{}
+	Static  func() interface{}
 }
 
-// NewJSONRoute creates a new json route.
-func NewJSONRoute(path string, fn func(http.ResponseWriter, *http.Request) interface{}) *JSONRoute {
+// APIRoute creates a new json route that has access to the response and request.
+func APIRoute(path string, fn func(http.ResponseWriter, *http.Request) interface{}) *JSONRoute {
 	return &JSONRoute{
 		APIPath: path,
 		Run:     fn,
+	}
+}
+
+// StaticAPIRoute creates a new json route the has no access to the response and request.
+func StaticAPIRoute(path string, fn func() interface{}) *JSONRoute {
+	return &JSONRoute{
+		APIPath: path,
+		Static:  fn,
 	}
 }
 
@@ -28,9 +37,19 @@ func (j *JSONRoute) Path() string {
 
 func (j *JSONRoute) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	var data interface{}
 	e := json.NewEncoder(w)
-	if err := e.Encode(j.Run(w, r)); err != nil {
+
+	if j.Static != nil {
+		data = j.Static()
+	} else if j.Run != nil {
+		data = j.Run(w, r)
+	}
+
+	if err := e.Encode(data); err != nil {
 		log.Error("Json Error:", err.Error())
+		ServeError(w, 500)
 	}
 }
 
@@ -40,8 +59,8 @@ func (j *JSONRoute) Handler() http.Handler {
 }
 
 // Expand does nothing for json routes.
-func (j *JSONRoute) Expand() []Route {
-	return nil
+func (j *JSONRoute) Expand() ([]Route, error) {
+	return nil, nil
 }
 
 var (

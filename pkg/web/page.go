@@ -119,11 +119,11 @@ func (p *Page) Handler() http.Handler {
 }
 
 // Expand returns nothing because a webpage cannont be expanded.
-func (p *Page) Expand() []Route {
+func (p *Page) Expand() ([]Route, error) {
 	if err := p.init(); err != nil {
-		log.Error(err.Error())
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 func (p *Page) init() error {
@@ -139,18 +139,34 @@ func (p *Page) init() error {
 	return nil
 }
 
+// Used a lot in testing.
+func (p *Page) settemplate(name string, data string) (err error) {
+	p.baseTmplName = name
+	p.blob = template.New(p.baseTmplName)
+	p.blob, err = p.blob.Parse(data)
+	return err
+}
+
+func (p *Page) settemplates(name string, files []string) (err error) {
+	p.baseTmplName = name
+	p.blob, err = template.New(name).ParseFiles(files...)
+	return err
+}
+
 func (p *Page) tmpls() []string {
 	var (
-		i      int
-		t      string
+		i      = 0
 		length = len(BaseTemplates) + 1
 	)
 
 	tmpls := make([]string, length)
-	for i, t = range BaseTemplates {
-		tmpls[i] = getfile(t)
+	if len(p.Template) > 0 {
+		tmpls[i] = getfile(p.Template)
+		i++
 	}
-	tmpls[i+1] = getfile(p.Template)
+	for k, t := range BaseTemplates {
+		tmpls[k+i] = getfile(t)
+	}
 	return tmpls
 }
 

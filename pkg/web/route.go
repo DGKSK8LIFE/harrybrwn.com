@@ -15,7 +15,7 @@ type Route interface {
 
 	// Expand will expand the route if it has any nested routes. Returns nil if there
 	// are no nested routes.
-	Expand() []Route
+	Expand() ([]Route, error)
 }
 
 // HTTPRoute is an http route
@@ -51,8 +51,8 @@ func (r *HTTPRoute) Handler() http.Handler {
 }
 
 // Expand returuns nothing for a baseic HTTPRoute.
-func (r *HTTPRoute) Expand() []Route {
-	return nil
+func (r *HTTPRoute) Expand() ([]Route, error) {
+	return nil, nil
 }
 
 // NestedRoute is a Route that can serve its own requests but also holds.
@@ -98,8 +98,8 @@ func (nr *NestedRoute) Handler() http.Handler {
 }
 
 // Expand will return the list of nested Routes
-func (nr *NestedRoute) Expand() []Route {
-	return nr.routes
+func (nr *NestedRoute) Expand() ([]Route, error) {
+	return nr.routes, nil
 }
 
 // AddRoute will add a nested Route.
@@ -126,6 +126,6 @@ func (ir *innerRoute) Handler() http.Handler {
 	return ir.inner.Handler()
 }
 
-func (ir *innerRoute) Expand() []Route {
+func (ir *innerRoute) Expand() ([]Route, error) {
 	return ir.inner.Expand()
 }

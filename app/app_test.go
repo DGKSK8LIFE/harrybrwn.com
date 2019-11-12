@@ -56,8 +56,8 @@ func TestHomePage(t *testing.T) {
 	}
 
 	if route, ok := handler.(*web.Page); ok {
-		if route.Expand() != nil { // needs to read the template files
-			t.Error("Pages shouldn't have anything to expand")
+		if inner, err := route.Expand(); inner != nil || err != nil { // needs to read the template files
+			t.Error("Pages shouldn't have anything to expand and should succeed")
 		}
 	}
 	rr = httptest.NewRecorder()
@@ -76,8 +76,12 @@ func TestHomePage(t *testing.T) {
 	}
 }
 
-func TestRoutes(t *testing.T) {
+func TestAllRoutes(t *testing.T) {
 	for i, route := range Routes {
+		if route.Path() == "/resume" {
+			r := route.(*web.Page)
+			r.Data = getResume("./static/data/resume.json")
+		}
 		if route == nil {
 			t.Error("one of your routes get set to 'nil' for some reason")
 		}
@@ -101,5 +105,29 @@ func TestRoutes(t *testing.T) {
 				t.Error("route", i, "needs a template file")
 			}
 		}
+
+		testGetReq(route, t)
+	}
+}
+
+func testGetReq(r web.Route, t *testing.T) {
+	var (
+		err   error
+		nodes []web.Route
+	)
+	if nodes, err = r.Expand(); nodes != nil {
+		if err != nil {
+			t.Errorf("got error expanding %s: %s\n", r.Path(), err.Error())
+		}
+		for _, node := range nodes {
+			testGetReq(node, t)
+		}
+	}
+
+	rr := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", r.Path(), nil)
+	r.Handler().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Error("bad response code from", r.Path(), "got", rr.Code)
 	}
 }

@@ -38,15 +38,16 @@ var Routes = []web.Route{
 		Data:      getResume("./static/data/resume.json"),
 	},
 	web.NewRoute("/static/", NewFileServer("static")), // handle file server
-	web.NewNestedRoute("/api",
-		web.NewJSONRoute("info", func(w http.ResponseWriter, r *http.Request) interface{} {
-			return info{Age: time.Since(bday).Hours() / 24 / 365}
-		}),
-	).SetHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotImplemented)
-		fmt.Fprint(w, `{"error": "Not finished with the api"}`)
+	web.NewNestedRoute("/api", apiroutes...).SetHandler(&web.JSONRoute{
+		Static: func() interface{} { return info{Error: "Not implimented"} },
 	}),
+}
+
+var apiroutes = []web.Route{
+	web.APIRoute("info", func(w http.ResponseWriter, r *http.Request) interface{} {
+		return info{Age: time.Since(bday).Hours() / 24 / 365}
+	}),
+	web.StaticAPIRoute("testing", func() interface{} { return map[string]string{"testing": "testing the api"} }),
 }
 
 var bday = time.Date(1998, time.August, 4, 4, 0, 0, 0, time.UTC)
@@ -82,5 +83,6 @@ type resumeItem struct {
 }
 
 type info struct {
-	Age float64 `json:"age"`
+	Age   float64 `json:"age,omitempty"`
+	Error string  `json:"error,omitempty"`
 }
