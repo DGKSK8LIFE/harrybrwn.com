@@ -10,46 +10,71 @@ var (
 	// DefaultErrorHandler is the default handler that for errors in the server.
 	DefaultErrorHandler http.Handler = http.HandlerFunc(NotFound)
 
-	// HandlerHook is a hook that alows for the modification of handlers at
+	// DefaultNotFoundHandler is the handler that executes if a page or resourse is not found.
+	DefaultNotFoundHandler = http.HandlerFunc(NotFound)
+
+	// DefaultHandlerHook is a hook that alows for the modification of handlers at
 	// runtime.
-	HandlerHook func(h http.Handler) http.Handler
+	DefaultHandlerHook func(h http.Handler) http.Handler
 )
+
+// ServeMux is an interface that defines compatability with the standard library
+// http.ServeMux struct.
+type ServeMux interface {
+	http.Handler
+	Handle(path string, handler http.Handler)
+	HandleFunc(path string, handler func(http.ResponseWriter, *http.Request))
+}
 
 // Router is an http router.
 type Router struct {
-	mux    *http.ServeMux
-	server *http.Server
+	mux         ServeMux
+	server      *http.Server
+	HandlerHook func(http.Handler) http.Handler
 }
 
-// NewRouter creates a new router.
+// NewRouter creates a new router which contains the default http.ServeMux.
 func NewRouter() *Router {
-	return &Router{mux: http.NewServeMux()}
+	return &Router{
+		mux:         new(http.ServeMux),
+		server:      nil,
+		HandlerHook: DefaultHandlerHook,
+	}
+}
+
+// CreateRouter will make a new router from a ServeMux interface.
+func CreateRouter(mux ServeMux) *Router {
+	return &Router{
+		mux:         mux,
+		server:      nil,
+		HandlerHook: DefaultHandlerHook,
+	}
 }
 
 // ListenAndServe will run the server.
-func (s *Router) ListenAndServe(addr string) error {
-	s.server = &http.Server{Addr: addr, Handler: s.mux}
-	if HandlerHook != nil {
-		s.server.Handler = HandlerHook(s.mux)
+func (r *Router) ListenAndServe(addr string) error {
+	r.server = &http.Server{Addr: addr, Handler: r.mux}
+	if r.HandlerHook != nil {
+		r.server.Handler = r.HandlerHook(r.mux)
 	}
 
-	return s.server.ListenAndServe()
+	return r.server.ListenAndServe()
 }
 
-// Handle registers the a path and a handler.
-func (s *Router) Handle(path string, h http.Handler) {
-	s.mux.Handle(path, h)
+// Handle registers the a path and a handler using the standard library interface.
+func (r *Router) Handle(path string, h http.Handler) {
+	r.mux.Handle(path, h)
 }
 
-// HandleFunc will register a new route with a HandlerFunc
-func (s *Router) HandleFunc(path string, fn http.HandlerFunc) {
-	s.mux.Handle(path, http.HandlerFunc(fn))
+// HandleFunc will register a new route with a HandlerFunc using the standard library interface.
+func (r *Router) HandleFunc(path string, fn http.HandlerFunc) {
+	r.mux.Handle(path, http.HandlerFunc(fn))
 }
 
 // HandleRoute will handle a route.
-func (s *Router) HandleRoute(r Route) {
+func (r *Router) HandleRoute(rt Route) {
 	var h http.Handler
-	nested, err := r.Expand()
+	nested, err := rt.Expand()
 
 	if err != nil {
 		log.Error(err)
@@ -60,27 +85,36 @@ func (s *Router) HandleRoute(r Route) {
 			h = DefaultErrorHandler
 		}
 	} else {
-		h = r.Handler()
+		h = rt.Handler()
 	}
-
-	s.mux.Handle(r.Path(), h)
+	r.mux.Handle(rt.Path(), h)
 
 	if nested != nil {
-		s.HandleRoutes(nested)
+		r.HandleRoutes(nested)
 	}
 }
 
 // HandleRoutes will handle a list of routes.
-func (s *Router) HandleRoutes(routes []Route) {
-	for _, r := range routes {
-		s.HandleRoute(r)
+func (r *Router) HandleRoutes(routes []Route) {
+	for _, rt := range routes {
+		r.HandleRoute(rt)
 	}
+}
+
+// AddRoute adds a route to the Router.
+func (r *Router) AddRoute(path string, h http.Handler) {
+	r.HandleRoute(NewRoute(path, h))
+}
+
+// AddRouteFunc adds a route to the Router from a function.
+func (r *Router) AddRouteFunc(path string, h http.HandlerFunc) {
+	r.HandleRoute(NewRouteFunc(path, h))
 }
 
 // HandleThing will handle a thing
 //
 // Ok, I cant remember why this is here. I think it's just unimplimented
-func (s *Router) HandleThing(thing interface{}) http.HandlerFunc {
+func (r *Router) HandleThing(thing interface{}) http.HandlerFunc {
 	// return func(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintf(w, "thing\n")
 	// }

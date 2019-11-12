@@ -92,6 +92,11 @@ func NotFound(w http.ResponseWriter, r *http.Request) {
 	ServeErrorMsg(w, "Not Found", 404)
 }
 
+// NotImplimented is a not implimented handler.
+func NotImplimented(w http.ResponseWriter, r *http.Request) {
+	ServeErrorMsg(w, "Not Implimented", http.StatusNotImplemented)
+}
+
 // ServeErrorMsg will serve a webpage displaying the error message and status code.
 func ServeErrorMsg(w http.ResponseWriter, msg string, status int) {
 	w.WriteHeader(status)

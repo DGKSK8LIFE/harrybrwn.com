@@ -30,6 +30,17 @@ func StaticAPIRoute(path string, fn func() interface{}) *JSONRoute {
 	}
 }
 
+// ServeJSON will turn an interface into json and write it to a response-writer.
+func ServeJSON(w http.ResponseWriter, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		log.Error("Json Error:", err.Error())
+		ServeError(w, 500)
+	}
+}
+
 // Path will return the route path.
 func (j *JSONRoute) Path() string {
 	return j.APIPath
@@ -39,7 +50,6 @@ func (j *JSONRoute) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var data interface{}
-	e := json.NewEncoder(w)
 
 	if j.Static != nil {
 		data = j.Static()
@@ -47,10 +57,7 @@ func (j *JSONRoute) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		data = j.Run(w, r)
 	}
 
-	if err := e.Encode(data); err != nil {
-		log.Error("Json Error:", err.Error())
-		ServeError(w, 500)
-	}
+	ServeJSON(w, data)
 }
 
 // Handler will return the handler.

@@ -69,8 +69,9 @@ func NewNestedRoute(path string, routes ...Route) *NestedRoute {
 		rts[i] = &innerRoute{basepath: path, inner: r}
 	}
 	return &NestedRoute{
-		BasePath: path,
-		routes:   rts,
+		BasePath:    path,
+		BaseHandler: http.HandlerFunc(NotImplimented),
+		routes:      rts,
 	}
 }
 

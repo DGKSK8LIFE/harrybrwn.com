@@ -147,12 +147,6 @@ func (p *Page) settemplate(name string, data string) (err error) {
 	return err
 }
 
-func (p *Page) settemplates(name string, files []string) (err error) {
-	p.baseTmplName = name
-	p.blob, err = template.New(name).ParseFiles(files...)
-	return err
-}
-
 func (p *Page) tmpls() []string {
 	var (
 		i      = 0

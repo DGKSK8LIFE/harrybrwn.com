@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -36,7 +35,6 @@ func init() {
 	cwd, _ := os.Getwd()
 	dir := filepath.Base(cwd)
 	if dir == "app" {
-		fmt.Println("changing directories")
 		os.Chdir("..")
 	}
 }

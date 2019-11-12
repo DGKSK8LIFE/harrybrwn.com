@@ -41,6 +41,7 @@ var Routes = []web.Route{
 	web.NewNestedRoute("/api", apiroutes...).SetHandler(&web.JSONRoute{
 		Static: func() interface{} { return info{Error: "Not implimented"} },
 	}),
+	// web.NewRoute("/github", http.RedirectHandler("https://github.com/harrybrwn", 301)),
 }
 
 var apiroutes = []web.Route{
