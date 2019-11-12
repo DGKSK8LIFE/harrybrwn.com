@@ -131,3 +131,48 @@ func testGetReq(r web.Route, t *testing.T) {
 		t.Error("bad response code from", r.Path(), "got", rr.Code)
 	}
 }
+
+func TestFileServer(t *testing.T) {
+	var (
+		rr  = httptest.NewRecorder()
+		req *http.Request
+	)
+	fs := web.NewRoute("/static/", NewFileServer("static"))
+	req, _ = http.NewRequest("GET", "/static/img/github.svg", nil)
+
+	fs.Handler().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Error("bad responce code from file server")
+	}
+	if len(rr.Body.Bytes()) < 1 {
+		t.Error("the file server did not get anything")
+	}
+
+	rr = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/static/filenothere.txt", nil)
+	fs.Handler().ServeHTTP(rr, req)
+	if rr.Code == 200 {
+		t.Error("file not found should not give a successful get request")
+	}
+	if rr.Code != 404 {
+		t.Error("why is the code not 404!!")
+	}
+
+	rr = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/static/img/me.jpg?size=sm", nil)
+	fs.Handler().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Error("bad response code")
+	}
+
+	rr = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/static/img/me.jpg?size=md", nil)
+	fs.Handler().ServeHTTP(rr, req)
+
+	if req.URL.Path != "/static/img/1688x2251/me.jpg" {
+		t.Error("wrong url")
+	}
+	if rr.Code != 200 {
+		t.Error("bad response code")
+	}
+}

@@ -6,6 +6,15 @@ import (
 	"harrybrown.com/pkg/log"
 )
 
+var (
+	// DefaultErrorHandler is the default handler that for errors in the server.
+	DefaultErrorHandler http.Handler = http.HandlerFunc(NotFound)
+
+	// HandlerHook is a hook that alows for the modification of handlers at
+	// runtime.
+	HandlerHook func(h http.Handler) http.Handler
+)
+
 // Router is an http router.
 type Router struct {
 	mux    *http.ServeMux
@@ -26,10 +35,6 @@ func (s *Router) ListenAndServe(addr string) error {
 
 	return s.server.ListenAndServe()
 }
-
-// HandlerHook is a hook that alows for the modification of handlers at
-// runtime
-var HandlerHook func(h http.Handler) http.Handler
 
 // Handle registers the a path and a handler.
 func (s *Router) Handle(path string, h http.Handler) {
@@ -52,7 +57,7 @@ func (s *Router) HandleRoute(r Route) {
 		if e, ok := err.(*ErrorHandler); ok {
 			h = e
 		} else {
-			h = http.HandlerFunc(NotFound)
+			h = DefaultErrorHandler
 		}
 	} else {
 		h = r.Handler()

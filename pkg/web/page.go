@@ -94,18 +94,18 @@ func (p *Page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if e, ok := err.(*ErrorHandler); ok {
 			e.ServeHTTP(w, r)
 		} else {
-			NotFound(w, r)
-			log.Error(err)
+			ServeErrorMsg(w, err.Error(), 500)
 		}
-		return
+		log.Error(err)
 	}
 }
 
 // AddTemplateFile will add a template file to the page struct
-func (p *Page) AddTemplateFile(files ...string) {
+func (p *Page) AddTemplateFile(files ...string) *Page {
 	for _, file := range files {
 		p.templates = append(p.templates, getfile(file))
 	}
+	return p
 }
 
 // Path returns the route path.
