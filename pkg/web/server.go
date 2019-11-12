@@ -110,13 +110,3 @@ func (r *Router) AddRoute(path string, h http.Handler) {
 func (r *Router) AddRouteFunc(path string, h http.HandlerFunc) {
 	r.HandleRoute(NewRouteFunc(path, h))
 }
-
-// HandleThing will handle a thing
-//
-// Ok, I cant remember why this is here. I think it's just unimplimented
-func (r *Router) HandleThing(thing interface{}) http.HandlerFunc {
-	// return func(w http.ResponseWriter, r *http.Request) {
-	// 	fmt.Fprintf(w, "thing\n")
-	// }
-	panic("not implimented")
-}
