@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"harrybrown.com/pkg/log"
 	"harrybrown.com/pkg/web"
 )
 
@@ -48,9 +50,16 @@ func TestHomePage(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handler := Routes[0].Handler()
 
+	logger := log.DefaultLogger
+	buf := new(bytes.Buffer)
+	log.DefaultLogger = log.NewColorLogger(buf, log.Blue)
 	handler.ServeHTTP(rr, req) // this is also going to log the error
 	if rr.Code != http.StatusInternalServerError {
 		t.Error("an uninitialized template should return fail, got:", rr.Code)
+	}
+	log.DefaultLogger = logger
+	if buf.Len() == 0 {
+		t.Error("should have logged and error here")
 	}
 
 	if route, ok := handler.(*web.Page); ok {

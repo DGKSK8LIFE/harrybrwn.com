@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"harrybrown.com/pkg/log"
 )
 
 func TestPageTemplatesCollection(t *testing.T) {
@@ -117,10 +119,18 @@ func TestPageTemplateErrors(t *testing.T) {
 		t.Error("writing to a bad template should result in an error")
 	}
 
+	logger := log.DefaultLogger
+	buf := new(bytes.Buffer)
+	log.DefaultLogger = log.NewPlainLogger(buf)
 	rr, req := newTesters(p.Path(), t)
 	p.Handler().ServeHTTP(rr, req)
 	if rr.Code != 500 {
 		t.Error("a request for a page with a bad template should give code 500, got:", rr.Code)
+	}
+	log.DefaultLogger = logger
+
+	if buf.Len() == 0 {
+		t.Error("should have logged an error here")
 	}
 }
 
