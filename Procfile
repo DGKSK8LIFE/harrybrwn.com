@@ -1,2 +1,2 @@
-web: bin/harrybrown.com
-local: bin/harrybrown.com -d
+web: bin/harrybrown.com -port $PORT
+local: bin/harrybrown.com -d -port 8080

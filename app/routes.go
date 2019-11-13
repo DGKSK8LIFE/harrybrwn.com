@@ -2,16 +2,24 @@ package app
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"harrybrown.com/pkg/log"
 	"harrybrown.com/pkg/web"
 )
 
+// Debug cooresponds with the debug flag
+var Debug = false
+
 func init() {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.PanicOnError)
+	BoolFlag(&Debug, "debug", "turn on debugging options")
+
 	web.TemplateDir = "templates/"
 	web.BaseTemplates = []string{"/index.html", "/nav.html"} // included in all pages
 }
@@ -25,6 +33,7 @@ var Routes = []web.Route{
 		RequestHook: func(self *web.Page, w http.ResponseWriter, r *http.Request) {
 			self.Data = &struct{ Age string }{Age: getAge()}
 		},
+		HotReload: Debug,
 	},
 	&web.Page{
 		Title:     "Freelancing",
