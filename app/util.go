@@ -163,7 +163,7 @@ func getFlags() ([]*appFlag, int) {
 	}
 
 	sort.Slice(flgs, func(i, j int) bool {
-		return flgs[i].name[0] < flgs[j].name[0]
+		return strings.Compare(flgs[i].name, flgs[j].name) == 0
 	})
 	return flgs, max
 }
