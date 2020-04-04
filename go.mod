@@ -1,5 +1,5 @@
 module harrybrown.com
 
-go 1.13
+go 1.14
 
 require github.com/gorilla/websocket v1.4.0
