@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"harrybrown.com/app"
+	"harrybrown.com/pkg/auth"
 	"harrybrown.com/pkg/cmd"
 	"harrybrown.com/pkg/log"
 	"harrybrown.com/pkg/web"
@@ -35,6 +36,7 @@ func main() {
 		go cmd.Run(app.Commands)
 	}
 
+	router.HandleFunc("/oauth/redirect", auth.RedirectHandler)
 	if err := router.ListenAndServe(":" + port); err != nil {
 		log.Fatal(err)
 	}
